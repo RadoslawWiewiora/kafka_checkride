@@ -1,5 +1,5 @@
 {
-  "namespace": "loanApprovalApp.avro",
+  "namespace": "pojo.avro",
   "type": "record",
   "name": "LoanApplication",
   "fields": [

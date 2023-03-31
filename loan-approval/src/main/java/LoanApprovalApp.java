@@ -6,6 +6,7 @@ import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.StreamsConfig;
 import org.apache.kafka.streams.Topology;
 import org.apache.kafka.streams.kstream.KStream;
+import pojo.avro.LoanApplication;
 
 public class LoanApprovalApp {
 
@@ -15,7 +16,6 @@ public class LoanApprovalApp {
         config.put(StreamsConfig.APPLICATION_ID_CONFIG, "loan-approval-app");
         config.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "broker-1:9092, broker-2:9092");
 
-
         // Specify default (de)serializers for record keys and for record values.
         config.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.Integer().getClass());
         config.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, Serdes.String().getClass());
@@ -24,25 +24,20 @@ public class LoanApprovalApp {
     }
 
     private static Topology getTopology() {
-        StreamsBuilder builder;
-        KStream<Integer, String> delimTransStream;
-        KStream<Integer, String> indTransStream;
-        Topology result;
 
-        builder = new StreamsBuilder();
+        StreamsBuilder builder = new StreamsBuilder();
 
-        // Source processor: get stream from Kafka topic
-        delimTransStream = builder.stream("some_topic_in");
+        // Source processor: get loan applications from Kafka topic
+        KStream<Integer, LoanApplication> loanApplicationsStream = builder.stream("loan_applications");
 
-        // Internal processor: break up the stream
-        indTransStream = delimTransStream.mapValues(value -> value.toUpperCase());
+        // Internal processor: some transform
+        KStream<Integer, String> indTransStream = loanApplicationsStream.mapValues(value -> value.getName().toUpperCase());
 
         // Sink processor: new stream back to new Kafka topic
         indTransStream.to("some_topic_out");
 
         // Generate and return topology
-        result = builder.build();
-        return result;
+        return builder.build();
     }
 
     public static void main(String[] args) {
