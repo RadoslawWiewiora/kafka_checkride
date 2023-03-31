@@ -1,0 +1,19 @@
+{
+  "namespace": "loanApprovalApp.avro",
+  "type": "record",
+  "name": "LoanApplication",
+  "fields": [
+    {
+      "name": "name",
+      "type": "string"
+    },
+    {
+      "name": "surname",
+      "type": "string"
+    },
+    {
+      "name": "amount",
+      "type": "double"
+    }
+  ]
+}
