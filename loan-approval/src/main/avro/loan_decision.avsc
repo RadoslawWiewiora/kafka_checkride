@@ -1,0 +1,23 @@
+{
+  "namespace": "pojo.avro",
+  "type": "record",
+  "name": "LoanDecision",
+  "fields": [
+    {
+      "name": "name",
+      "type": "string"
+    },
+    {
+      "name": "surname",
+      "type": "string"
+    },
+    {
+      "name": "amount",
+      "type": "double"
+    },
+    {
+      "name": "approved",
+      "type": "boolean"
+    }
+  ]
+}

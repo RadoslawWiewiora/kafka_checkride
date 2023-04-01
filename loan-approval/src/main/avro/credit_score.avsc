@@ -1,0 +1,19 @@
+{
+  "namespace": "pojo.avro",
+  "type": "record",
+  "name": "CreditScore",
+  "fields": [
+    {
+      "name": "name",
+      "type": "string"
+    },
+    {
+      "name": "surname",
+      "type": "string"
+    },
+    {
+      "name": "creditScore",
+      "type": "int"
+    }
+  ]
+}
