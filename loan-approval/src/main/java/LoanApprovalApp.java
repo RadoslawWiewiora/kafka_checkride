@@ -45,10 +45,20 @@ public class LoanApprovalApp {
         // Source processor: get loan applications from Kafka topic
         KStream<Integer, LoanApplication> loanApplicationsStream = builder.stream(Constants.LOAN_APPLICATIONS_TOPIC);
 
+        // Source processor: get internal clients credit scores from Kafka topic
+        KStream<Integer, client_credit_score> internalClientsStream = builder.stream(Constants.INTERNAL_CLIENTS_TOPIC);
+
+        //
+        internalClientsStream
+                .mapValues(v -> {
+                    log.info("Value from internal clients stream: " + v.toString());
+                    return v;
+                });
+
         // Internal processor: make decision based on credit score
         KStream<Integer, LoanDecision> decisionStream = loanApplicationsStream
                 .mapValues(v -> {
-                    log.info("Value from stream: " + v.toString());
+                    log.info("Value from loan stream: " + v.toString());
                     return v;
                 })
                 .mapValues(v -> LoanDecisionMaker.AnalyzeApplication(v, getCreditScore(v)));

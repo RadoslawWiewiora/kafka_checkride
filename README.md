@@ -17,6 +17,10 @@ Install connect JDBC plugin:
 
 1. docker-compose exec -u root connect confluent-hub install confluentinc/kafka-connect-jdbc:10.0.0
 2. docker-compose restart connect
+3. add connector:
+   curl -X POST -H "Content-Type: application/json" \
+   --data-binary "@loan-approval/src/main/resources/connect/connector_Internal-Clients-Connector-Avro_config.json" \
+   http://localhost:8083/connectors
 
 Add Postgres connector:
 

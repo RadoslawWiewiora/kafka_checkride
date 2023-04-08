@@ -1,0 +1,23 @@
+{
+  "connect.name": "client_credit_score",
+  "fields": [
+    {
+      "name": "id",
+      "type": "int"
+    },
+    {
+      "name": "firstname",
+      "type": "string"
+    },
+    {
+      "name": "lastname",
+      "type": "string"
+    },
+    {
+      "name": "credit_score",
+      "type": "int"
+    }
+  ],
+  "name": "client_credit_score",
+  "type": "record"
+}

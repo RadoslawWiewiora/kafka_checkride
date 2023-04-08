@@ -23,8 +23,8 @@ public class LoanApplicationProducer {
         // Sample Loan application
         Random randomNum = new Random();
         LoanApplication application = new LoanApplication();
-        application.setName("Mike");
-        application.setSurname("B");
+        application.setName("John");
+        application.setSurname("Smith");
         application.setAmount(randomNum.nextInt(100, 5000));
 
         // For topic key I would like to use hash code of client PII data

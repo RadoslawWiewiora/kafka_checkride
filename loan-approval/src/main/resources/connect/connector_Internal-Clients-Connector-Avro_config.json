@@ -12,7 +12,7 @@
     "mode": "incrementing",
     "incrementing.column.name": "id",
     "table.types": "TABLE",
-    "topic.prefix": "internal",
+    "topic.prefix": "internal_",
     "value.converter.schema.registry.url": "http://schema-registry:8081"
   }
 }
