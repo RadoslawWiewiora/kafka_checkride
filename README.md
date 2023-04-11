@@ -22,6 +22,12 @@ Install connect JDBC plugin:
    --data-binary "@loan-approval/src/main/resources/connect/connector_Internal-Clients-Connector-Avro_config.json" \
    http://localhost:8083/connectors
 
+Reset consumer group offset (open docker broker terminal)
+
+kafka-consumer-groups --bootstrap-server localhost:9092 --group loan-approval-app --topic "loan_applications" --reset-offsets --to-earliest --execute
+kafka-consumer-groups --bootstrap-server localhost:9092 --group loan-approval-app --topic "internal_client_credit_score" --reset-offsets --to-earliest --execute
+kafka-consumer-groups --bootstrap-server localhost:9092 --group loan-approval-app --topic "loan_decisions" --reset-offsets --to-earliest --execute
+
 Add Postgres connector:
 
 Use config file (loan-approval/src/main/resources/connect/connector_Internal-Clients-Connector-Avro_config.json)

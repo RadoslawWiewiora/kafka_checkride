@@ -9,15 +9,16 @@ import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.StreamsConfig;
 import org.apache.kafka.streams.Topology;
 import org.apache.kafka.streams.kstream.KStream;
+import org.apache.kafka.streams.kstream.KTable;
+import org.apache.kafka.streams.kstream.ValueJoiner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import pojo.avro.CreditScore;
 import pojo.avro.LoanApplication;
+import pojo.avro.LoanApplicationWithCreditScore;
 import pojo.avro.LoanDecision;
 
 import java.time.Duration;
 import java.util.Properties;
-import java.util.Random;
 
 public class LoanApprovalApp {
 
@@ -31,7 +32,7 @@ public class LoanApprovalApp {
         props.put(StreamsConfig.CLIENT_ID_CONFIG, "loan-approval-app-client");
         props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, Constants.BOOTSTRAP_SERVERS_CONFIG);
         props.put(AbstractKafkaSchemaSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG, Constants.SCHEMA_REGISTRY_URL_CONFIG);
-        props.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.Integer().getClass().getName());
+        props.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.String().getClass().getName());
         props.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, SpecificAvroSerde.class);
         props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
 
@@ -43,37 +44,36 @@ public class LoanApprovalApp {
         StreamsBuilder builder = new StreamsBuilder();
 
         // Source processor: get loan applications from Kafka topic
-        KStream<Integer, LoanApplication> loanApplicationsStream = builder.stream(Constants.LOAN_APPLICATIONS_TOPIC);
+        KStream<String, LoanApplication> loanApplicationsStream = builder.stream(Constants.LOAN_APPLICATIONS_TOPIC);
 
         // Source processor: get internal clients credit scores from Kafka topic
-        KStream<Integer, client_credit_score> internalClientsStream = builder.stream(Constants.INTERNAL_CLIENTS_TOPIC);
+        KTable<String, client_credit_score> internalClientsStream = builder.table(Constants.INTERNAL_CLIENTS_TOPIC);
 
-        //
-        internalClientsStream
-                .mapValues(v -> {
-                    log.info("Value from internal clients stream: " + v.toString());
-                    return v;
-                });
+        ValueJoiner<LoanApplication, client_credit_score, LoanApplicationWithCreditScore> enrichmentJoiner = (loanApplication, internal_credit_score) -> {
+            LoanApplicationWithCreditScore withCreditScore = new LoanApplicationWithCreditScore();
+            withCreditScore.setName(loanApplication.getName());
+            withCreditScore.setSurname(loanApplication.getSurname());
+            if (internal_credit_score != null) {
+                withCreditScore.setCreditScore(internal_credit_score.getCreditScore());
+            }
+            return withCreditScore;
+        };
+
+        KStream<String, LoanApplicationWithCreditScore> enrichedApplications = loanApplicationsStream
+                .join(internalClientsStream, enrichmentJoiner)
+                .peek((key, value) -> log.info("AFTER JOIN key " + key + " value " + value));
 
         // Internal processor: make decision based on credit score
-        KStream<Integer, LoanDecision> decisionStream = loanApplicationsStream
-                .mapValues(v -> {
-                    log.info("Value from loan stream: " + v.toString());
-                    return v;
-                })
-                .mapValues(v -> LoanDecisionMaker.AnalyzeApplication(v, getCreditScore(v)));
+        KStream<String, LoanDecision> decisionStream = enrichedApplications
+                .mapValues(LoanDecisionMaker::AnalyzeApplication);
+
+        decisionStream.peek((k,v) -> log.info("DECISIONS: " + k + " value: " + v));
 
         // Sink processor: return decision to new Kafka topic
         decisionStream.to(Constants.LOAN_DECISIONS_TOPIC);
 
         // Generate and return topology
         return builder.build();
-    }
-
-    private static CreditScore getCreditScore(LoanApplication application) {
-        Random randomNum = new Random();
-        int score = randomNum.nextInt(100);
-        return new CreditScore(application.getName(), application.getSurname(), score);
     }
 
     public static void main(String[] args) {
@@ -87,13 +87,11 @@ public class LoanApprovalApp {
             streams.start();
 
             // TODO How to run it locally for some period of time?
-            Thread.sleep(Duration.ofMinutes(1).toMillis());
+            Thread.sleep(Duration.ofSeconds(15).toMillis());
 
             Runtime.getRuntime().addShutdownHook(new Thread(streams::close));
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-
-        System.out.println("Done");
     }
 }
