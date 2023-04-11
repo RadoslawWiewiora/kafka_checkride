@@ -1,7 +1,5 @@
-package model;
-
-import pojo.avro.LoanApplicationWithCreditScore;
 import pojo.avro.LoanDecision;
+import pojo.avro.LoanRequestsWithCreditScore;
 
 /**
  * This class is responsible for making decision about loan approval or reject.
@@ -9,7 +7,7 @@ import pojo.avro.LoanDecision;
  * simple: credit score > 70 approve.
  */
 public class LoanDecisionMaker {
-    public static LoanDecision AnalyzeApplication(LoanApplicationWithCreditScore application) {
+    public static LoanDecision AnalyzeApplication(LoanRequestsWithCreditScore application) {
         if (application.getCreditScore() > 70) {
             return new LoanDecision(application.getName(), application.getSurname(), application.getAmount(), true);
         }

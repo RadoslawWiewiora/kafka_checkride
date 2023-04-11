@@ -1,7 +1,5 @@
 import io.confluent.kafka.serializers.AbstractKafkaSchemaSerDeConfig;
 import io.confluent.kafka.streams.serdes.avro.SpecificAvroSerde;
-import model.Constants;
-import model.LoanDecisionMaker;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.KafkaStreams;
@@ -10,12 +8,11 @@ import org.apache.kafka.streams.StreamsConfig;
 import org.apache.kafka.streams.Topology;
 import org.apache.kafka.streams.kstream.KStream;
 import org.apache.kafka.streams.kstream.KTable;
-import org.apache.kafka.streams.kstream.ValueJoiner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import pojo.avro.LoanApplication;
-import pojo.avro.LoanApplicationWithCreditScore;
 import pojo.avro.LoanDecision;
+import pojo.avro.LoanRequest;
+import pojo.avro.LoanRequestsWithCreditScore;
 
 import java.time.Duration;
 import java.util.Properties;
@@ -44,24 +41,15 @@ public class LoanApprovalApp {
         StreamsBuilder builder = new StreamsBuilder();
 
         // Source processor: get loan applications from Kafka topic
-        KStream<String, LoanApplication> loanApplicationsStream = builder.stream(Constants.LOAN_APPLICATIONS_TOPIC);
+        KStream<String, LoanRequest> loanApplicationsStream = builder.stream(Constants.LOAN_REQUESTS_TOPIC);
 
         // Source processor: get internal clients credit scores from Kafka topic
         KTable<String, client_credit_score> internalClientsStream = builder.table(Constants.INTERNAL_CLIENTS_TOPIC);
 
-        ValueJoiner<LoanApplication, client_credit_score, LoanApplicationWithCreditScore> enrichmentJoiner = (loanApplication, internal_credit_score) -> {
-            LoanApplicationWithCreditScore withCreditScore = new LoanApplicationWithCreditScore();
-            withCreditScore.setName(loanApplication.getName());
-            withCreditScore.setSurname(loanApplication.getSurname());
-            if (internal_credit_score != null) {
-                withCreditScore.setCreditScore(internal_credit_score.getCreditScore());
-            }
-            return withCreditScore;
-        };
-
-        KStream<String, LoanApplicationWithCreditScore> enrichedApplications = loanApplicationsStream
-                .join(internalClientsStream, enrichmentJoiner)
-                .peek((key, value) -> log.info("AFTER JOIN key " + key + " value " + value));
+        // Internal processor: Join loan requests with internal clients credit score
+        ApplicationCreditScoreJoiner joiner = new ApplicationCreditScoreJoiner();
+        KStream<String, LoanRequestsWithCreditScore> enrichedApplications = loanApplicationsStream
+                .join(internalClientsStream, joiner);
 
         // Internal processor: make decision based on credit score
         KStream<String, LoanDecision> decisionStream = enrichedApplications
@@ -78,8 +66,6 @@ public class LoanApprovalApp {
 
     public static void main(String[] args) {
 
-        System.out.println("Start");
-
         // Create a streams application based on config & topology.
         try (KafkaStreams streams = new KafkaStreams(getTopology(), getConfig())) {
 
@@ -87,7 +73,7 @@ public class LoanApprovalApp {
             streams.start();
 
             // TODO How to run it locally for some period of time?
-            Thread.sleep(Duration.ofSeconds(15).toMillis());
+            Thread.sleep(Duration.ofMinutes(15).toMillis());
 
             Runtime.getRuntime().addShutdownHook(new Thread(streams::close));
         } catch (InterruptedException e) {

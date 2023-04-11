@@ -13,26 +13,26 @@ import org.apache.avro.message.BinaryMessageDecoder;
 import org.apache.avro.message.SchemaStore;
 
 @org.apache.avro.specific.AvroGenerated
-public class LoanApplication extends org.apache.avro.specific.SpecificRecordBase implements org.apache.avro.specific.SpecificRecord {
-  private static final long serialVersionUID = 2767875600799188866L;
+public class LoanRequestsWithCreditScore extends org.apache.avro.specific.SpecificRecordBase implements org.apache.avro.specific.SpecificRecord {
+  private static final long serialVersionUID = -1551944589974709048L;
 
 
-  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"LoanApplication\",\"namespace\":\"pojo.avro\",\"fields\":[{\"name\":\"name\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"}},{\"name\":\"surname\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"}},{\"name\":\"amount\",\"type\":\"double\"}]}");
+  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"LoanRequestsWithCreditScore\",\"namespace\":\"pojo.avro\",\"fields\":[{\"name\":\"name\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"}},{\"name\":\"surname\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"}},{\"name\":\"amount\",\"type\":\"double\"},{\"name\":\"creditScore\",\"type\":\"int\"}]}");
   public static org.apache.avro.Schema getClassSchema() { return SCHEMA$; }
 
   private static final SpecificData MODEL$ = new SpecificData();
 
-  private static final BinaryMessageEncoder<LoanApplication> ENCODER =
+  private static final BinaryMessageEncoder<LoanRequestsWithCreditScore> ENCODER =
       new BinaryMessageEncoder<>(MODEL$, SCHEMA$);
 
-  private static final BinaryMessageDecoder<LoanApplication> DECODER =
+  private static final BinaryMessageDecoder<LoanRequestsWithCreditScore> DECODER =
       new BinaryMessageDecoder<>(MODEL$, SCHEMA$);
 
   /**
    * Return the BinaryMessageEncoder instance used by this class.
    * @return the message encoder used by this class
    */
-  public static BinaryMessageEncoder<LoanApplication> getEncoder() {
+  public static BinaryMessageEncoder<LoanRequestsWithCreditScore> getEncoder() {
     return ENCODER;
   }
 
@@ -40,7 +40,7 @@ public class LoanApplication extends org.apache.avro.specific.SpecificRecordBase
    * Return the BinaryMessageDecoder instance used by this class.
    * @return the message decoder used by this class
    */
-  public static BinaryMessageDecoder<LoanApplication> getDecoder() {
+  public static BinaryMessageDecoder<LoanRequestsWithCreditScore> getDecoder() {
     return DECODER;
   }
 
@@ -49,12 +49,12 @@ public class LoanApplication extends org.apache.avro.specific.SpecificRecordBase
    * @param resolver a {@link SchemaStore} used to find schemas by fingerprint
    * @return a BinaryMessageDecoder instance for this class backed by the given SchemaStore
    */
-  public static BinaryMessageDecoder<LoanApplication> createDecoder(SchemaStore resolver) {
+  public static BinaryMessageDecoder<LoanRequestsWithCreditScore> createDecoder(SchemaStore resolver) {
     return new BinaryMessageDecoder<>(MODEL$, SCHEMA$, resolver);
   }
 
   /**
-   * Serializes this LoanApplication to a ByteBuffer.
+   * Serializes this LoanRequestsWithCreditScore to a ByteBuffer.
    * @return a buffer holding the serialized data for this instance
    * @throws java.io.IOException if this instance could not be serialized
    */
@@ -63,12 +63,12 @@ public class LoanApplication extends org.apache.avro.specific.SpecificRecordBase
   }
 
   /**
-   * Deserializes a LoanApplication from a ByteBuffer.
+   * Deserializes a LoanRequestsWithCreditScore from a ByteBuffer.
    * @param b a byte buffer holding serialized data for an instance of this class
-   * @return a LoanApplication instance decoded from the given buffer
+   * @return a LoanRequestsWithCreditScore instance decoded from the given buffer
    * @throws java.io.IOException if the given bytes could not be deserialized into an instance of this class
    */
-  public static LoanApplication fromByteBuffer(
+  public static LoanRequestsWithCreditScore fromByteBuffer(
       java.nio.ByteBuffer b) throws java.io.IOException {
     return DECODER.decode(b);
   }
@@ -76,24 +76,27 @@ public class LoanApplication extends org.apache.avro.specific.SpecificRecordBase
   private java.lang.String name;
   private java.lang.String surname;
   private double amount;
+  private int creditScore;
 
   /**
    * Default constructor.  Note that this does not initialize fields
    * to their default values from the schema.  If that is desired then
    * one should use <code>newBuilder()</code>.
    */
-  public LoanApplication() {}
+  public LoanRequestsWithCreditScore() {}
 
   /**
    * All-args constructor.
    * @param name The new value for name
    * @param surname The new value for surname
    * @param amount The new value for amount
+   * @param creditScore The new value for creditScore
    */
-  public LoanApplication(java.lang.String name, java.lang.String surname, java.lang.Double amount) {
+  public LoanRequestsWithCreditScore(java.lang.String name, java.lang.String surname, java.lang.Double amount, java.lang.Integer creditScore) {
     this.name = name;
     this.surname = surname;
     this.amount = amount;
+    this.creditScore = creditScore;
   }
 
   @Override
@@ -109,6 +112,7 @@ public class LoanApplication extends org.apache.avro.specific.SpecificRecordBase
     case 0: return name;
     case 1: return surname;
     case 2: return amount;
+    case 3: return creditScore;
     default: throw new IndexOutOfBoundsException("Invalid index: " + field$);
     }
   }
@@ -121,6 +125,7 @@ public class LoanApplication extends org.apache.avro.specific.SpecificRecordBase
     case 0: name = value$ != null ? value$.toString() : null; break;
     case 1: surname = value$ != null ? value$.toString() : null; break;
     case 2: amount = (java.lang.Double)value$; break;
+    case 3: creditScore = (java.lang.Integer)value$; break;
     default: throw new IndexOutOfBoundsException("Invalid index: " + field$);
     }
   }
@@ -177,49 +182,67 @@ public class LoanApplication extends org.apache.avro.specific.SpecificRecordBase
   }
 
   /**
-   * Creates a new LoanApplication RecordBuilder.
-   * @return A new LoanApplication RecordBuilder
+   * Gets the value of the 'creditScore' field.
+   * @return The value of the 'creditScore' field.
    */
-  public static pojo.avro.LoanApplication.Builder newBuilder() {
-    return new pojo.avro.LoanApplication.Builder();
+  public int getCreditScore() {
+    return creditScore;
+  }
+
+
+  /**
+   * Sets the value of the 'creditScore' field.
+   * @param value the value to set.
+   */
+  public void setCreditScore(int value) {
+    this.creditScore = value;
   }
 
   /**
-   * Creates a new LoanApplication RecordBuilder by copying an existing Builder.
+   * Creates a new LoanRequestsWithCreditScore RecordBuilder.
+   * @return A new LoanRequestsWithCreditScore RecordBuilder
+   */
+  public static pojo.avro.LoanRequestsWithCreditScore.Builder newBuilder() {
+    return new pojo.avro.LoanRequestsWithCreditScore.Builder();
+  }
+
+  /**
+   * Creates a new LoanRequestsWithCreditScore RecordBuilder by copying an existing Builder.
    * @param other The existing builder to copy.
-   * @return A new LoanApplication RecordBuilder
+   * @return A new LoanRequestsWithCreditScore RecordBuilder
    */
-  public static pojo.avro.LoanApplication.Builder newBuilder(pojo.avro.LoanApplication.Builder other) {
+  public static pojo.avro.LoanRequestsWithCreditScore.Builder newBuilder(pojo.avro.LoanRequestsWithCreditScore.Builder other) {
     if (other == null) {
-      return new pojo.avro.LoanApplication.Builder();
+      return new pojo.avro.LoanRequestsWithCreditScore.Builder();
     } else {
-      return new pojo.avro.LoanApplication.Builder(other);
+      return new pojo.avro.LoanRequestsWithCreditScore.Builder(other);
     }
   }
 
   /**
-   * Creates a new LoanApplication RecordBuilder by copying an existing LoanApplication instance.
+   * Creates a new LoanRequestsWithCreditScore RecordBuilder by copying an existing LoanRequestsWithCreditScore instance.
    * @param other The existing instance to copy.
-   * @return A new LoanApplication RecordBuilder
+   * @return A new LoanRequestsWithCreditScore RecordBuilder
    */
-  public static pojo.avro.LoanApplication.Builder newBuilder(pojo.avro.LoanApplication other) {
+  public static pojo.avro.LoanRequestsWithCreditScore.Builder newBuilder(pojo.avro.LoanRequestsWithCreditScore other) {
     if (other == null) {
-      return new pojo.avro.LoanApplication.Builder();
+      return new pojo.avro.LoanRequestsWithCreditScore.Builder();
     } else {
-      return new pojo.avro.LoanApplication.Builder(other);
+      return new pojo.avro.LoanRequestsWithCreditScore.Builder(other);
     }
   }
 
   /**
-   * RecordBuilder for LoanApplication instances.
+   * RecordBuilder for LoanRequestsWithCreditScore instances.
    */
   @org.apache.avro.specific.AvroGenerated
-  public static class Builder extends org.apache.avro.specific.SpecificRecordBuilderBase<LoanApplication>
-    implements org.apache.avro.data.RecordBuilder<LoanApplication> {
+  public static class Builder extends org.apache.avro.specific.SpecificRecordBuilderBase<LoanRequestsWithCreditScore>
+    implements org.apache.avro.data.RecordBuilder<LoanRequestsWithCreditScore> {
 
     private java.lang.String name;
     private java.lang.String surname;
     private double amount;
+    private int creditScore;
 
     /** Creates a new Builder */
     private Builder() {
@@ -230,7 +253,7 @@ public class LoanApplication extends org.apache.avro.specific.SpecificRecordBase
      * Creates a Builder by copying an existing Builder.
      * @param other The existing Builder to copy.
      */
-    private Builder(pojo.avro.LoanApplication.Builder other) {
+    private Builder(pojo.avro.LoanRequestsWithCreditScore.Builder other) {
       super(other);
       if (isValidValue(fields()[0], other.name)) {
         this.name = data().deepCopy(fields()[0].schema(), other.name);
@@ -244,13 +267,17 @@ public class LoanApplication extends org.apache.avro.specific.SpecificRecordBase
         this.amount = data().deepCopy(fields()[2].schema(), other.amount);
         fieldSetFlags()[2] = other.fieldSetFlags()[2];
       }
+      if (isValidValue(fields()[3], other.creditScore)) {
+        this.creditScore = data().deepCopy(fields()[3].schema(), other.creditScore);
+        fieldSetFlags()[3] = other.fieldSetFlags()[3];
+      }
     }
 
     /**
-     * Creates a Builder by copying an existing LoanApplication instance
+     * Creates a Builder by copying an existing LoanRequestsWithCreditScore instance
      * @param other The existing instance to copy.
      */
-    private Builder(pojo.avro.LoanApplication other) {
+    private Builder(pojo.avro.LoanRequestsWithCreditScore other) {
       super(SCHEMA$, MODEL$);
       if (isValidValue(fields()[0], other.name)) {
         this.name = data().deepCopy(fields()[0].schema(), other.name);
@@ -263,6 +290,10 @@ public class LoanApplication extends org.apache.avro.specific.SpecificRecordBase
       if (isValidValue(fields()[2], other.amount)) {
         this.amount = data().deepCopy(fields()[2].schema(), other.amount);
         fieldSetFlags()[2] = true;
+      }
+      if (isValidValue(fields()[3], other.creditScore)) {
+        this.creditScore = data().deepCopy(fields()[3].schema(), other.creditScore);
+        fieldSetFlags()[3] = true;
       }
     }
 
@@ -280,7 +311,7 @@ public class LoanApplication extends org.apache.avro.specific.SpecificRecordBase
       * @param value The value of 'name'.
       * @return This builder.
       */
-    public pojo.avro.LoanApplication.Builder setName(java.lang.String value) {
+    public pojo.avro.LoanRequestsWithCreditScore.Builder setName(java.lang.String value) {
       validate(fields()[0], value);
       this.name = value;
       fieldSetFlags()[0] = true;
@@ -300,7 +331,7 @@ public class LoanApplication extends org.apache.avro.specific.SpecificRecordBase
       * Clears the value of the 'name' field.
       * @return This builder.
       */
-    public pojo.avro.LoanApplication.Builder clearName() {
+    public pojo.avro.LoanRequestsWithCreditScore.Builder clearName() {
       name = null;
       fieldSetFlags()[0] = false;
       return this;
@@ -320,7 +351,7 @@ public class LoanApplication extends org.apache.avro.specific.SpecificRecordBase
       * @param value The value of 'surname'.
       * @return This builder.
       */
-    public pojo.avro.LoanApplication.Builder setSurname(java.lang.String value) {
+    public pojo.avro.LoanRequestsWithCreditScore.Builder setSurname(java.lang.String value) {
       validate(fields()[1], value);
       this.surname = value;
       fieldSetFlags()[1] = true;
@@ -340,7 +371,7 @@ public class LoanApplication extends org.apache.avro.specific.SpecificRecordBase
       * Clears the value of the 'surname' field.
       * @return This builder.
       */
-    public pojo.avro.LoanApplication.Builder clearSurname() {
+    public pojo.avro.LoanRequestsWithCreditScore.Builder clearSurname() {
       surname = null;
       fieldSetFlags()[1] = false;
       return this;
@@ -360,7 +391,7 @@ public class LoanApplication extends org.apache.avro.specific.SpecificRecordBase
       * @param value The value of 'amount'.
       * @return This builder.
       */
-    public pojo.avro.LoanApplication.Builder setAmount(double value) {
+    public pojo.avro.LoanRequestsWithCreditScore.Builder setAmount(double value) {
       validate(fields()[2], value);
       this.amount = value;
       fieldSetFlags()[2] = true;
@@ -380,19 +411,59 @@ public class LoanApplication extends org.apache.avro.specific.SpecificRecordBase
       * Clears the value of the 'amount' field.
       * @return This builder.
       */
-    public pojo.avro.LoanApplication.Builder clearAmount() {
+    public pojo.avro.LoanRequestsWithCreditScore.Builder clearAmount() {
       fieldSetFlags()[2] = false;
+      return this;
+    }
+
+    /**
+      * Gets the value of the 'creditScore' field.
+      * @return The value.
+      */
+    public int getCreditScore() {
+      return creditScore;
+    }
+
+
+    /**
+      * Sets the value of the 'creditScore' field.
+      * @param value The value of 'creditScore'.
+      * @return This builder.
+      */
+    public pojo.avro.LoanRequestsWithCreditScore.Builder setCreditScore(int value) {
+      validate(fields()[3], value);
+      this.creditScore = value;
+      fieldSetFlags()[3] = true;
+      return this;
+    }
+
+    /**
+      * Checks whether the 'creditScore' field has been set.
+      * @return True if the 'creditScore' field has been set, false otherwise.
+      */
+    public boolean hasCreditScore() {
+      return fieldSetFlags()[3];
+    }
+
+
+    /**
+      * Clears the value of the 'creditScore' field.
+      * @return This builder.
+      */
+    public pojo.avro.LoanRequestsWithCreditScore.Builder clearCreditScore() {
+      fieldSetFlags()[3] = false;
       return this;
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public LoanApplication build() {
+    public LoanRequestsWithCreditScore build() {
       try {
-        LoanApplication record = new LoanApplication();
+        LoanRequestsWithCreditScore record = new LoanRequestsWithCreditScore();
         record.name = fieldSetFlags()[0] ? this.name : (java.lang.String) defaultValue(fields()[0]);
         record.surname = fieldSetFlags()[1] ? this.surname : (java.lang.String) defaultValue(fields()[1]);
         record.amount = fieldSetFlags()[2] ? this.amount : (java.lang.Double) defaultValue(fields()[2]);
+        record.creditScore = fieldSetFlags()[3] ? this.creditScore : (java.lang.Integer) defaultValue(fields()[3]);
         return record;
       } catch (org.apache.avro.AvroMissingFieldException e) {
         throw e;
@@ -403,8 +474,8 @@ public class LoanApplication extends org.apache.avro.specific.SpecificRecordBase
   }
 
   @SuppressWarnings("unchecked")
-  private static final org.apache.avro.io.DatumWriter<LoanApplication>
-    WRITER$ = (org.apache.avro.io.DatumWriter<LoanApplication>)MODEL$.createDatumWriter(SCHEMA$);
+  private static final org.apache.avro.io.DatumWriter<LoanRequestsWithCreditScore>
+    WRITER$ = (org.apache.avro.io.DatumWriter<LoanRequestsWithCreditScore>)MODEL$.createDatumWriter(SCHEMA$);
 
   @Override public void writeExternal(java.io.ObjectOutput out)
     throws java.io.IOException {
@@ -412,8 +483,8 @@ public class LoanApplication extends org.apache.avro.specific.SpecificRecordBase
   }
 
   @SuppressWarnings("unchecked")
-  private static final org.apache.avro.io.DatumReader<LoanApplication>
-    READER$ = (org.apache.avro.io.DatumReader<LoanApplication>)MODEL$.createDatumReader(SCHEMA$);
+  private static final org.apache.avro.io.DatumReader<LoanRequestsWithCreditScore>
+    READER$ = (org.apache.avro.io.DatumReader<LoanRequestsWithCreditScore>)MODEL$.createDatumReader(SCHEMA$);
 
   @Override public void readExternal(java.io.ObjectInput in)
     throws java.io.IOException {
@@ -431,6 +502,8 @@ public class LoanApplication extends org.apache.avro.specific.SpecificRecordBase
 
     out.writeDouble(this.amount);
 
+    out.writeInt(this.creditScore);
+
   }
 
   @Override public void customDecode(org.apache.avro.io.ResolvingDecoder in)
@@ -444,8 +517,10 @@ public class LoanApplication extends org.apache.avro.specific.SpecificRecordBase
 
       this.amount = in.readDouble();
 
+      this.creditScore = in.readInt();
+
     } else {
-      for (int i = 0; i < 3; i++) {
+      for (int i = 0; i < 4; i++) {
         switch (fieldOrder[i].pos()) {
         case 0:
           this.name = in.readString();
@@ -457,6 +532,10 @@ public class LoanApplication extends org.apache.avro.specific.SpecificRecordBase
 
         case 2:
           this.amount = in.readDouble();
+          break;
+
+        case 3:
+          this.creditScore = in.readInt();
           break;
 
         default:

@@ -24,9 +24,13 @@ Install connect JDBC plugin:
 
 Reset consumer group offset (open docker broker terminal)
 
-kafka-consumer-groups --bootstrap-server localhost:9092 --group loan-approval-app --topic "loan_applications" --reset-offsets --to-earliest --execute
+kafka-consumer-groups --bootstrap-server localhost:9092 --group loan-approval-app --topic "loan_requests" --reset-offsets --to-earliest --execute
 kafka-consumer-groups --bootstrap-server localhost:9092 --group loan-approval-app --topic "internal_client_credit_score" --reset-offsets --to-earliest --execute
 kafka-consumer-groups --bootstrap-server localhost:9092 --group loan-approval-app --topic "loan_decisions" --reset-offsets --to-earliest --execute
+
+Drop topics 
+kafka-topics --bootstrap-server localhost:9092 --topic "loan_requests" --delete
+kafka-topics --bootstrap-server localhost:9092 --topic "loan_decisions" --delete
 
 Add Postgres connector:
 

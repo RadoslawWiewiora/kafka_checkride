@@ -1,7 +1,7 @@
 {
   "namespace": "pojo.avro",
   "type": "record",
-  "name": "LoanApplicationWithCreditScore",
+  "name": "LoanRequest",
   "fields": [
     {
       "name": "name",
@@ -14,10 +14,6 @@
     {
       "name": "amount",
       "type": "double"
-    },
-    {
-      "name": "creditScore",
-      "type": "int"
     }
   ]
 }
