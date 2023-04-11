@@ -18,6 +18,10 @@
     {
       "name": "approved",
       "type": "boolean"
+    },
+    {
+      "name": "source",
+      "type": "string"
     }
   ]
 }

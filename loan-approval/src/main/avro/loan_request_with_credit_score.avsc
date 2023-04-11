@@ -18,6 +18,10 @@
     {
       "name": "creditScore",
       "type": "int"
+    },
+    {
+      "name": "creditScoreSource",
+      "type": "string"
     }
   ]
 }

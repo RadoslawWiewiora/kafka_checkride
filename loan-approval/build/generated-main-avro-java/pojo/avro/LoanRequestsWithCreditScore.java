@@ -14,10 +14,10 @@ import org.apache.avro.message.SchemaStore;
 
 @org.apache.avro.specific.AvroGenerated
 public class LoanRequestsWithCreditScore extends org.apache.avro.specific.SpecificRecordBase implements org.apache.avro.specific.SpecificRecord {
-  private static final long serialVersionUID = -1551944589974709048L;
+  private static final long serialVersionUID = -4215210617121659160L;
 
 
-  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"LoanRequestsWithCreditScore\",\"namespace\":\"pojo.avro\",\"fields\":[{\"name\":\"name\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"}},{\"name\":\"surname\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"}},{\"name\":\"amount\",\"type\":\"double\"},{\"name\":\"creditScore\",\"type\":\"int\"}]}");
+  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"LoanRequestsWithCreditScore\",\"namespace\":\"pojo.avro\",\"fields\":[{\"name\":\"name\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"}},{\"name\":\"surname\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"}},{\"name\":\"amount\",\"type\":\"double\"},{\"name\":\"creditScore\",\"type\":\"int\"},{\"name\":\"creditScoreSource\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"}}]}");
   public static org.apache.avro.Schema getClassSchema() { return SCHEMA$; }
 
   private static final SpecificData MODEL$ = new SpecificData();
@@ -77,6 +77,7 @@ public class LoanRequestsWithCreditScore extends org.apache.avro.specific.Specif
   private java.lang.String surname;
   private double amount;
   private int creditScore;
+  private java.lang.String creditScoreSource;
 
   /**
    * Default constructor.  Note that this does not initialize fields
@@ -91,12 +92,14 @@ public class LoanRequestsWithCreditScore extends org.apache.avro.specific.Specif
    * @param surname The new value for surname
    * @param amount The new value for amount
    * @param creditScore The new value for creditScore
+   * @param creditScoreSource The new value for creditScoreSource
    */
-  public LoanRequestsWithCreditScore(java.lang.String name, java.lang.String surname, java.lang.Double amount, java.lang.Integer creditScore) {
+  public LoanRequestsWithCreditScore(java.lang.String name, java.lang.String surname, java.lang.Double amount, java.lang.Integer creditScore, java.lang.String creditScoreSource) {
     this.name = name;
     this.surname = surname;
     this.amount = amount;
     this.creditScore = creditScore;
+    this.creditScoreSource = creditScoreSource;
   }
 
   @Override
@@ -113,6 +116,7 @@ public class LoanRequestsWithCreditScore extends org.apache.avro.specific.Specif
     case 1: return surname;
     case 2: return amount;
     case 3: return creditScore;
+    case 4: return creditScoreSource;
     default: throw new IndexOutOfBoundsException("Invalid index: " + field$);
     }
   }
@@ -126,6 +130,7 @@ public class LoanRequestsWithCreditScore extends org.apache.avro.specific.Specif
     case 1: surname = value$ != null ? value$.toString() : null; break;
     case 2: amount = (java.lang.Double)value$; break;
     case 3: creditScore = (java.lang.Integer)value$; break;
+    case 4: creditScoreSource = value$ != null ? value$.toString() : null; break;
     default: throw new IndexOutOfBoundsException("Invalid index: " + field$);
     }
   }
@@ -199,6 +204,23 @@ public class LoanRequestsWithCreditScore extends org.apache.avro.specific.Specif
   }
 
   /**
+   * Gets the value of the 'creditScoreSource' field.
+   * @return The value of the 'creditScoreSource' field.
+   */
+  public java.lang.String getCreditScoreSource() {
+    return creditScoreSource;
+  }
+
+
+  /**
+   * Sets the value of the 'creditScoreSource' field.
+   * @param value the value to set.
+   */
+  public void setCreditScoreSource(java.lang.String value) {
+    this.creditScoreSource = value;
+  }
+
+  /**
    * Creates a new LoanRequestsWithCreditScore RecordBuilder.
    * @return A new LoanRequestsWithCreditScore RecordBuilder
    */
@@ -243,6 +265,7 @@ public class LoanRequestsWithCreditScore extends org.apache.avro.specific.Specif
     private java.lang.String surname;
     private double amount;
     private int creditScore;
+    private java.lang.String creditScoreSource;
 
     /** Creates a new Builder */
     private Builder() {
@@ -271,6 +294,10 @@ public class LoanRequestsWithCreditScore extends org.apache.avro.specific.Specif
         this.creditScore = data().deepCopy(fields()[3].schema(), other.creditScore);
         fieldSetFlags()[3] = other.fieldSetFlags()[3];
       }
+      if (isValidValue(fields()[4], other.creditScoreSource)) {
+        this.creditScoreSource = data().deepCopy(fields()[4].schema(), other.creditScoreSource);
+        fieldSetFlags()[4] = other.fieldSetFlags()[4];
+      }
     }
 
     /**
@@ -294,6 +321,10 @@ public class LoanRequestsWithCreditScore extends org.apache.avro.specific.Specif
       if (isValidValue(fields()[3], other.creditScore)) {
         this.creditScore = data().deepCopy(fields()[3].schema(), other.creditScore);
         fieldSetFlags()[3] = true;
+      }
+      if (isValidValue(fields()[4], other.creditScoreSource)) {
+        this.creditScoreSource = data().deepCopy(fields()[4].schema(), other.creditScoreSource);
+        fieldSetFlags()[4] = true;
       }
     }
 
@@ -455,6 +486,46 @@ public class LoanRequestsWithCreditScore extends org.apache.avro.specific.Specif
       return this;
     }
 
+    /**
+      * Gets the value of the 'creditScoreSource' field.
+      * @return The value.
+      */
+    public java.lang.String getCreditScoreSource() {
+      return creditScoreSource;
+    }
+
+
+    /**
+      * Sets the value of the 'creditScoreSource' field.
+      * @param value The value of 'creditScoreSource'.
+      * @return This builder.
+      */
+    public pojo.avro.LoanRequestsWithCreditScore.Builder setCreditScoreSource(java.lang.String value) {
+      validate(fields()[4], value);
+      this.creditScoreSource = value;
+      fieldSetFlags()[4] = true;
+      return this;
+    }
+
+    /**
+      * Checks whether the 'creditScoreSource' field has been set.
+      * @return True if the 'creditScoreSource' field has been set, false otherwise.
+      */
+    public boolean hasCreditScoreSource() {
+      return fieldSetFlags()[4];
+    }
+
+
+    /**
+      * Clears the value of the 'creditScoreSource' field.
+      * @return This builder.
+      */
+    public pojo.avro.LoanRequestsWithCreditScore.Builder clearCreditScoreSource() {
+      creditScoreSource = null;
+      fieldSetFlags()[4] = false;
+      return this;
+    }
+
     @Override
     @SuppressWarnings("unchecked")
     public LoanRequestsWithCreditScore build() {
@@ -464,6 +535,7 @@ public class LoanRequestsWithCreditScore extends org.apache.avro.specific.Specif
         record.surname = fieldSetFlags()[1] ? this.surname : (java.lang.String) defaultValue(fields()[1]);
         record.amount = fieldSetFlags()[2] ? this.amount : (java.lang.Double) defaultValue(fields()[2]);
         record.creditScore = fieldSetFlags()[3] ? this.creditScore : (java.lang.Integer) defaultValue(fields()[3]);
+        record.creditScoreSource = fieldSetFlags()[4] ? this.creditScoreSource : (java.lang.String) defaultValue(fields()[4]);
         return record;
       } catch (org.apache.avro.AvroMissingFieldException e) {
         throw e;
@@ -504,6 +576,8 @@ public class LoanRequestsWithCreditScore extends org.apache.avro.specific.Specif
 
     out.writeInt(this.creditScore);
 
+    out.writeString(this.creditScoreSource);
+
   }
 
   @Override public void customDecode(org.apache.avro.io.ResolvingDecoder in)
@@ -519,8 +593,10 @@ public class LoanRequestsWithCreditScore extends org.apache.avro.specific.Specif
 
       this.creditScore = in.readInt();
 
+      this.creditScoreSource = in.readString();
+
     } else {
-      for (int i = 0; i < 4; i++) {
+      for (int i = 0; i < 5; i++) {
         switch (fieldOrder[i].pos()) {
         case 0:
           this.name = in.readString();
@@ -536,6 +612,10 @@ public class LoanRequestsWithCreditScore extends org.apache.avro.specific.Specif
 
         case 3:
           this.creditScore = in.readInt();
+          break;
+
+        case 4:
+          this.creditScoreSource = in.readString();
           break;
 
         default:

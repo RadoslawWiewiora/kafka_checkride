@@ -14,10 +14,10 @@ import org.apache.avro.message.SchemaStore;
 
 @org.apache.avro.specific.AvroGenerated
 public class LoanDecision extends org.apache.avro.specific.SpecificRecordBase implements org.apache.avro.specific.SpecificRecord {
-  private static final long serialVersionUID = 866124008226359440L;
+  private static final long serialVersionUID = -3692892284424519441L;
 
 
-  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"LoanDecision\",\"namespace\":\"pojo.avro\",\"fields\":[{\"name\":\"name\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"}},{\"name\":\"surname\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"}},{\"name\":\"amount\",\"type\":\"double\"},{\"name\":\"approved\",\"type\":\"boolean\"}]}");
+  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"LoanDecision\",\"namespace\":\"pojo.avro\",\"fields\":[{\"name\":\"name\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"}},{\"name\":\"surname\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"}},{\"name\":\"amount\",\"type\":\"double\"},{\"name\":\"approved\",\"type\":\"boolean\"},{\"name\":\"source\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"}}]}");
   public static org.apache.avro.Schema getClassSchema() { return SCHEMA$; }
 
   private static final SpecificData MODEL$ = new SpecificData();
@@ -77,6 +77,7 @@ public class LoanDecision extends org.apache.avro.specific.SpecificRecordBase im
   private java.lang.String surname;
   private double amount;
   private boolean approved;
+  private java.lang.String source;
 
   /**
    * Default constructor.  Note that this does not initialize fields
@@ -91,12 +92,14 @@ public class LoanDecision extends org.apache.avro.specific.SpecificRecordBase im
    * @param surname The new value for surname
    * @param amount The new value for amount
    * @param approved The new value for approved
+   * @param source The new value for source
    */
-  public LoanDecision(java.lang.String name, java.lang.String surname, java.lang.Double amount, java.lang.Boolean approved) {
+  public LoanDecision(java.lang.String name, java.lang.String surname, java.lang.Double amount, java.lang.Boolean approved, java.lang.String source) {
     this.name = name;
     this.surname = surname;
     this.amount = amount;
     this.approved = approved;
+    this.source = source;
   }
 
   @Override
@@ -113,6 +116,7 @@ public class LoanDecision extends org.apache.avro.specific.SpecificRecordBase im
     case 1: return surname;
     case 2: return amount;
     case 3: return approved;
+    case 4: return source;
     default: throw new IndexOutOfBoundsException("Invalid index: " + field$);
     }
   }
@@ -126,6 +130,7 @@ public class LoanDecision extends org.apache.avro.specific.SpecificRecordBase im
     case 1: surname = value$ != null ? value$.toString() : null; break;
     case 2: amount = (java.lang.Double)value$; break;
     case 3: approved = (java.lang.Boolean)value$; break;
+    case 4: source = value$ != null ? value$.toString() : null; break;
     default: throw new IndexOutOfBoundsException("Invalid index: " + field$);
     }
   }
@@ -199,6 +204,23 @@ public class LoanDecision extends org.apache.avro.specific.SpecificRecordBase im
   }
 
   /**
+   * Gets the value of the 'source' field.
+   * @return The value of the 'source' field.
+   */
+  public java.lang.String getSource() {
+    return source;
+  }
+
+
+  /**
+   * Sets the value of the 'source' field.
+   * @param value the value to set.
+   */
+  public void setSource(java.lang.String value) {
+    this.source = value;
+  }
+
+  /**
    * Creates a new LoanDecision RecordBuilder.
    * @return A new LoanDecision RecordBuilder
    */
@@ -243,6 +265,7 @@ public class LoanDecision extends org.apache.avro.specific.SpecificRecordBase im
     private java.lang.String surname;
     private double amount;
     private boolean approved;
+    private java.lang.String source;
 
     /** Creates a new Builder */
     private Builder() {
@@ -271,6 +294,10 @@ public class LoanDecision extends org.apache.avro.specific.SpecificRecordBase im
         this.approved = data().deepCopy(fields()[3].schema(), other.approved);
         fieldSetFlags()[3] = other.fieldSetFlags()[3];
       }
+      if (isValidValue(fields()[4], other.source)) {
+        this.source = data().deepCopy(fields()[4].schema(), other.source);
+        fieldSetFlags()[4] = other.fieldSetFlags()[4];
+      }
     }
 
     /**
@@ -294,6 +321,10 @@ public class LoanDecision extends org.apache.avro.specific.SpecificRecordBase im
       if (isValidValue(fields()[3], other.approved)) {
         this.approved = data().deepCopy(fields()[3].schema(), other.approved);
         fieldSetFlags()[3] = true;
+      }
+      if (isValidValue(fields()[4], other.source)) {
+        this.source = data().deepCopy(fields()[4].schema(), other.source);
+        fieldSetFlags()[4] = true;
       }
     }
 
@@ -455,6 +486,46 @@ public class LoanDecision extends org.apache.avro.specific.SpecificRecordBase im
       return this;
     }
 
+    /**
+      * Gets the value of the 'source' field.
+      * @return The value.
+      */
+    public java.lang.String getSource() {
+      return source;
+    }
+
+
+    /**
+      * Sets the value of the 'source' field.
+      * @param value The value of 'source'.
+      * @return This builder.
+      */
+    public pojo.avro.LoanDecision.Builder setSource(java.lang.String value) {
+      validate(fields()[4], value);
+      this.source = value;
+      fieldSetFlags()[4] = true;
+      return this;
+    }
+
+    /**
+      * Checks whether the 'source' field has been set.
+      * @return True if the 'source' field has been set, false otherwise.
+      */
+    public boolean hasSource() {
+      return fieldSetFlags()[4];
+    }
+
+
+    /**
+      * Clears the value of the 'source' field.
+      * @return This builder.
+      */
+    public pojo.avro.LoanDecision.Builder clearSource() {
+      source = null;
+      fieldSetFlags()[4] = false;
+      return this;
+    }
+
     @Override
     @SuppressWarnings("unchecked")
     public LoanDecision build() {
@@ -464,6 +535,7 @@ public class LoanDecision extends org.apache.avro.specific.SpecificRecordBase im
         record.surname = fieldSetFlags()[1] ? this.surname : (java.lang.String) defaultValue(fields()[1]);
         record.amount = fieldSetFlags()[2] ? this.amount : (java.lang.Double) defaultValue(fields()[2]);
         record.approved = fieldSetFlags()[3] ? this.approved : (java.lang.Boolean) defaultValue(fields()[3]);
+        record.source = fieldSetFlags()[4] ? this.source : (java.lang.String) defaultValue(fields()[4]);
         return record;
       } catch (org.apache.avro.AvroMissingFieldException e) {
         throw e;
@@ -504,6 +576,8 @@ public class LoanDecision extends org.apache.avro.specific.SpecificRecordBase im
 
     out.writeBoolean(this.approved);
 
+    out.writeString(this.source);
+
   }
 
   @Override public void customDecode(org.apache.avro.io.ResolvingDecoder in)
@@ -519,8 +593,10 @@ public class LoanDecision extends org.apache.avro.specific.SpecificRecordBase im
 
       this.approved = in.readBoolean();
 
+      this.source = in.readString();
+
     } else {
-      for (int i = 0; i < 4; i++) {
+      for (int i = 0; i < 5; i++) {
         switch (fieldOrder[i].pos()) {
         case 0:
           this.name = in.readString();
@@ -536,6 +612,10 @@ public class LoanDecision extends org.apache.avro.specific.SpecificRecordBase im
 
         case 3:
           this.approved = in.readBoolean();
+          break;
+
+        case 4:
+          this.source = in.readString();
           break;
 
         default:

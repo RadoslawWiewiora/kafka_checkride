@@ -8,11 +8,14 @@ import pojo.avro.LoanRequestsWithCreditScore;
  */
 public class LoanDecisionMaker {
     public static LoanDecision AnalyzeApplication(LoanRequestsWithCreditScore application) {
-        if (application.getCreditScore() > 70) {
-            return new LoanDecision(application.getName(), application.getSurname(), application.getAmount(), true);
-        }
-        else {
-            return new LoanDecision(application.getName(), application.getSurname(), application.getAmount(), false);
-        }
+        LoanDecision decision = new LoanDecision();
+        decision.setName(application.getName());
+        decision.setSurname(application.getSurname());
+        decision.setAmount(application.getAmount());
+        decision.setSource(application.getCreditScoreSource());
+
+        decision.setApproved(application.getCreditScore() > 70);
+
+        return decision;
     }
 }

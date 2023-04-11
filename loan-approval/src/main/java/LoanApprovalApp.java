@@ -47,7 +47,7 @@ public class LoanApprovalApp {
         KTable<String, client_credit_score> internalClientsStream = builder.table(Constants.INTERNAL_CLIENTS_TOPIC);
 
         // Internal processor: Join loan requests with internal clients credit score
-        ApplicationCreditScoreJoiner joiner = new ApplicationCreditScoreJoiner();
+        LoanRequestCreditScoreJoiner joiner = new LoanRequestCreditScoreJoiner();
         KStream<String, LoanRequestsWithCreditScore> enrichedApplications = loanApplicationsStream
                 .join(internalClientsStream, joiner);
 
