@@ -32,6 +32,9 @@ Drop topics
 kafka-topics --bootstrap-server localhost:9092 --topic "loan_requests" --delete
 kafka-topics --bootstrap-server localhost:9092 --topic "loan_decisions" --delete
 
+Delete old schema
+curl -X DELETE http://localhost:8081/subjects/loan_decisions-value
+
 Add Postgres connector:
 
 Use config file (loan-approval/src/main/resources/connect/connector_Internal-Clients-Connector-Avro_config.json)

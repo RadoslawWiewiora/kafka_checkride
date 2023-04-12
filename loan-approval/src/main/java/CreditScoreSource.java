@@ -1,0 +1,5 @@
+
+enum CreditScoreSource {
+    INTERNAL,
+    EXTERNAL
+}

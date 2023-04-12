@@ -9,8 +9,11 @@ public class LoanRequestCreditScoreJoiner implements ValueJoiner<LoanRequest, cl
         LoanRequestsWithCreditScore withCreditScore = new LoanRequestsWithCreditScore();
         withCreditScore.setName(request.getName());
         withCreditScore.setSurname(request.getSurname());
-        withCreditScore.setCreditScore(creditScore.getCreditScore());
-        withCreditScore.setCreditScoreSource("Internal");
+        withCreditScore.setAmount(request.getAmount());
+        if (creditScore != null) {
+            withCreditScore.setCreditScore(creditScore.getCreditScore());
+            withCreditScore.setCreditScoreSource(CreditScoreSource.INTERNAL.name());
+        }
 
         return withCreditScore;
     }

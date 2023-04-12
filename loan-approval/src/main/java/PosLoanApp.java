@@ -38,43 +38,34 @@ public class PosLoanApp {
 
             // subscribe to a topic
             consumer.subscribe(List.of(Constants.LOAN_DECISIONS_TOPIC));
-
-            log.info("Waiting for response");
-
             records = consumer.poll(Duration.ofMillis(1000));
         }
 
         for (ConsumerRecord<String, LoanDecision> record : records) {
-            log.info("LOAN DECISION:");
-            log.info("Key: " + record.key() + ", Value: " + record.value());
+            log.info("LOAN DECISION: " + record.value());
         }
     }
 
     public static void sendLoanRequest() {
 
+        try (KafkaProducer<String, LoanRequest> producer = new KafkaProducer<>(getProducerConfig())) {
+            producer.send(generateRequest("John", "1"));
+            producer.send(generateRequest("Ann", "100"));
+            producer.flush();
+        }
+    }
+
+    public static ProducerRecord<String, LoanRequest> generateRequest(String name, String key) {
         // Sample loan request
         Random randomNum = new Random();
         LoanRequest application = new LoanRequest();
-        application.setName("John");
+        application.setName(name);
         application.setSurname("Smith");
         application.setAmount(randomNum.nextInt(100, 5000));
 
         // For topic key I would like to use hash code of client PII data
         // Integer key = (application.getName() + application.getSurname()).hashCode();
-        String key = "1";
-        ProducerRecord<String, LoanRequest> request =
-                new ProducerRecord<>(Constants.LOAN_REQUESTS_TOPIC, key, application);
-
-        try (KafkaProducer<String, LoanRequest> producer = new KafkaProducer<>(getProducerConfig())) {
-            producer.send(request, (metadata, exception) -> {
-                if (exception != null) {
-                    log.error("Data not send to Kafka. Error: " + exception.getMessage());
-                } else {
-                    log.info("Data send to Kafka");
-                }
-            });
-            producer.flush();
-        }
+        return new ProducerRecord<>(Constants.LOAN_REQUESTS_TOPIC, key, application);
     }
 
     public static Properties getProducerConfig() {

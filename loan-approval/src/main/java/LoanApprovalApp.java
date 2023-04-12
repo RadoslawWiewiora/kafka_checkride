@@ -48,14 +48,18 @@ public class LoanApprovalApp {
 
         // Internal processor: Join loan requests with internal clients credit score
         LoanRequestCreditScoreJoiner joiner = new LoanRequestCreditScoreJoiner();
-        KStream<String, LoanRequestsWithCreditScore> enrichedApplications = loanApplicationsStream
-                .join(internalClientsStream, joiner);
+        KStream<String, LoanRequestsWithCreditScore> joined = loanApplicationsStream
+                .leftJoin(internalClientsStream, joiner);
+
+        KStream<String, LoanRequestsWithCreditScore> withoutCreditScore = joined.filter((k, v) -> v.getCreditScoreSource() == null);
+        KStream<String, LoanRequestsWithCreditScore> withInternalCreditScore = joined.filter((k, v) -> v.getCreditScoreSource() != null);
+
+        KStream<String, LoanRequestsWithCreditScore> withExternalCreditScore = withoutCreditScore.mapValues(CreditBureauMock::addCreditScore);
+        KStream<String, LoanRequestsWithCreditScore> withCreditScore = withInternalCreditScore.merge(withExternalCreditScore);
 
         // Internal processor: make decision based on credit score
-        KStream<String, LoanDecision> decisionStream = enrichedApplications
+        KStream<String, LoanDecision> decisionStream = withCreditScore
                 .mapValues(LoanDecisionMaker::AnalyzeApplication);
-
-        decisionStream.peek((k,v) -> log.info("DECISIONS: " + k + " value: " + v));
 
         // Sink processor: return decision to new Kafka topic
         decisionStream.to(Constants.LOAN_DECISIONS_TOPIC);
@@ -73,11 +77,11 @@ public class LoanApprovalApp {
             streams.start();
 
             // TODO How to run it locally for some period of time?
-            Thread.sleep(Duration.ofMinutes(15).toMillis());
+            Thread.sleep(Duration.ofMinutes(10).toMillis());
 
             Runtime.getRuntime().addShutdownHook(new Thread(streams::close));
         } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+            log.error(e.getMessage());
         }
     }
 }

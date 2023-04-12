@@ -1,3 +1,5 @@
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import pojo.avro.LoanDecision;
 import pojo.avro.LoanRequestsWithCreditScore;
 
@@ -7,15 +9,18 @@ import pojo.avro.LoanRequestsWithCreditScore;
  * simple: credit score > 70 approve.
  */
 public class LoanDecisionMaker {
-    public static LoanDecision AnalyzeApplication(LoanRequestsWithCreditScore application) {
+
+    private static final Logger log = LoggerFactory.getLogger(LoanApprovalApp.class.getSimpleName());
+
+    public static LoanDecision AnalyzeApplication(LoanRequestsWithCreditScore request) {
         LoanDecision decision = new LoanDecision();
-        decision.setName(application.getName());
-        decision.setSurname(application.getSurname());
-        decision.setAmount(application.getAmount());
-        decision.setSource(application.getCreditScoreSource());
+        decision.setName(request.getName());
+        decision.setSurname(request.getSurname());
+        decision.setAmount(request.getAmount());
+        decision.setSource(request.getCreditScoreSource());
+        decision.setApproved(request.getCreditScore() > 70);
 
-        decision.setApproved(application.getCreditScore() > 70);
-
+        log.info(String.format("DECISION: %s score: %s, source: %s", decision.getApproved(), request.getCreditScore(), request.getCreditScoreSource()));
         return decision;
     }
 }
