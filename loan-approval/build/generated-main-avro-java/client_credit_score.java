@@ -13,13 +13,16 @@ import org.apache.avro.message.SchemaStore;
 
 @org.apache.avro.specific.AvroGenerated
 public class client_credit_score extends org.apache.avro.specific.SpecificRecordBase implements org.apache.avro.specific.SpecificRecord {
-  private static final long serialVersionUID = 1730944730738992677L;
+  private static final long serialVersionUID = -3437212297535105357L;
 
 
-  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"client_credit_score\",\"fields\":[{\"name\":\"id\",\"type\":\"int\"},{\"name\":\"firstname\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"}},{\"name\":\"lastname\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"}},{\"name\":\"credit_score\",\"type\":\"int\"}],\"connect.name\":\"client_credit_score\"}");
+  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"client_credit_score\",\"fields\":[{\"name\":\"id\",\"type\":\"int\"},{\"name\":\"firstname\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"}},{\"name\":\"lastname\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"}},{\"name\":\"credit_score\",\"type\":\"int\"},{\"name\":\"timestamp\",\"type\":{\"type\":\"long\",\"connect.name\":\"org.apache.kafka.connect.data.Timestamp\",\"connect.version\":1,\"logicalType\":\"timestamp-millis\"}}],\"connect.name\":\"client_credit_score\"}");
   public static org.apache.avro.Schema getClassSchema() { return SCHEMA$; }
 
   private static final SpecificData MODEL$ = new SpecificData();
+  static {
+    MODEL$.addLogicalTypeConversion(new org.apache.avro.data.TimeConversions.TimestampMillisConversion());
+  }
 
   private static final BinaryMessageEncoder<client_credit_score> ENCODER =
       new BinaryMessageEncoder<>(MODEL$, SCHEMA$);
@@ -76,6 +79,7 @@ public class client_credit_score extends org.apache.avro.specific.SpecificRecord
   private java.lang.String firstname;
   private java.lang.String lastname;
   private int credit_score;
+  private java.time.Instant timestamp;
 
   /**
    * Default constructor.  Note that this does not initialize fields
@@ -90,12 +94,14 @@ public class client_credit_score extends org.apache.avro.specific.SpecificRecord
    * @param firstname The new value for firstname
    * @param lastname The new value for lastname
    * @param credit_score The new value for credit_score
+   * @param timestamp The new value for timestamp
    */
-  public client_credit_score(java.lang.Integer id, java.lang.String firstname, java.lang.String lastname, java.lang.Integer credit_score) {
+  public client_credit_score(java.lang.Integer id, java.lang.String firstname, java.lang.String lastname, java.lang.Integer credit_score, java.time.Instant timestamp) {
     this.id = id;
     this.firstname = firstname;
     this.lastname = lastname;
     this.credit_score = credit_score;
+    this.timestamp = timestamp.truncatedTo(java.time.temporal.ChronoUnit.MILLIS);
   }
 
   @Override
@@ -112,8 +118,24 @@ public class client_credit_score extends org.apache.avro.specific.SpecificRecord
     case 1: return firstname;
     case 2: return lastname;
     case 3: return credit_score;
+    case 4: return timestamp;
     default: throw new IndexOutOfBoundsException("Invalid index: " + field$);
     }
+  }
+
+  private static final org.apache.avro.Conversion<?>[] conversions =
+      new org.apache.avro.Conversion<?>[] {
+      null,
+      null,
+      null,
+      null,
+      new org.apache.avro.data.TimeConversions.TimestampMillisConversion(),
+      null
+  };
+
+  @Override
+  public org.apache.avro.Conversion<?> getConversion(int field) {
+    return conversions[field];
   }
 
   // Used by DatumReader.  Applications should not call.
@@ -125,6 +147,7 @@ public class client_credit_score extends org.apache.avro.specific.SpecificRecord
     case 1: firstname = value$ != null ? value$.toString() : null; break;
     case 2: lastname = value$ != null ? value$.toString() : null; break;
     case 3: credit_score = (java.lang.Integer)value$; break;
+    case 4: timestamp = (java.time.Instant)value$; break;
     default: throw new IndexOutOfBoundsException("Invalid index: " + field$);
     }
   }
@@ -198,6 +221,23 @@ public class client_credit_score extends org.apache.avro.specific.SpecificRecord
   }
 
   /**
+   * Gets the value of the 'timestamp' field.
+   * @return The value of the 'timestamp' field.
+   */
+  public java.time.Instant getTimestamp() {
+    return timestamp;
+  }
+
+
+  /**
+   * Sets the value of the 'timestamp' field.
+   * @param value the value to set.
+   */
+  public void setTimestamp(java.time.Instant value) {
+    this.timestamp = value.truncatedTo(java.time.temporal.ChronoUnit.MILLIS);
+  }
+
+  /**
    * Creates a new client_credit_score RecordBuilder.
    * @return A new client_credit_score RecordBuilder
    */
@@ -242,6 +282,7 @@ public class client_credit_score extends org.apache.avro.specific.SpecificRecord
     private java.lang.String firstname;
     private java.lang.String lastname;
     private int credit_score;
+    private java.time.Instant timestamp;
 
     /** Creates a new Builder */
     private Builder() {
@@ -270,6 +311,10 @@ public class client_credit_score extends org.apache.avro.specific.SpecificRecord
         this.credit_score = data().deepCopy(fields()[3].schema(), other.credit_score);
         fieldSetFlags()[3] = other.fieldSetFlags()[3];
       }
+      if (isValidValue(fields()[4], other.timestamp)) {
+        this.timestamp = data().deepCopy(fields()[4].schema(), other.timestamp);
+        fieldSetFlags()[4] = other.fieldSetFlags()[4];
+      }
     }
 
     /**
@@ -293,6 +338,10 @@ public class client_credit_score extends org.apache.avro.specific.SpecificRecord
       if (isValidValue(fields()[3], other.credit_score)) {
         this.credit_score = data().deepCopy(fields()[3].schema(), other.credit_score);
         fieldSetFlags()[3] = true;
+      }
+      if (isValidValue(fields()[4], other.timestamp)) {
+        this.timestamp = data().deepCopy(fields()[4].schema(), other.timestamp);
+        fieldSetFlags()[4] = true;
       }
     }
 
@@ -454,6 +503,45 @@ public class client_credit_score extends org.apache.avro.specific.SpecificRecord
       return this;
     }
 
+    /**
+      * Gets the value of the 'timestamp' field.
+      * @return The value.
+      */
+    public java.time.Instant getTimestamp() {
+      return timestamp;
+    }
+
+
+    /**
+      * Sets the value of the 'timestamp' field.
+      * @param value The value of 'timestamp'.
+      * @return This builder.
+      */
+    public client_credit_score.Builder setTimestamp(java.time.Instant value) {
+      validate(fields()[4], value);
+      this.timestamp = value.truncatedTo(java.time.temporal.ChronoUnit.MILLIS);
+      fieldSetFlags()[4] = true;
+      return this;
+    }
+
+    /**
+      * Checks whether the 'timestamp' field has been set.
+      * @return True if the 'timestamp' field has been set, false otherwise.
+      */
+    public boolean hasTimestamp() {
+      return fieldSetFlags()[4];
+    }
+
+
+    /**
+      * Clears the value of the 'timestamp' field.
+      * @return This builder.
+      */
+    public client_credit_score.Builder clearTimestamp() {
+      fieldSetFlags()[4] = false;
+      return this;
+    }
+
     @Override
     @SuppressWarnings("unchecked")
     public client_credit_score build() {
@@ -463,6 +551,7 @@ public class client_credit_score extends org.apache.avro.specific.SpecificRecord
         record.firstname = fieldSetFlags()[1] ? this.firstname : (java.lang.String) defaultValue(fields()[1]);
         record.lastname = fieldSetFlags()[2] ? this.lastname : (java.lang.String) defaultValue(fields()[2]);
         record.credit_score = fieldSetFlags()[3] ? this.credit_score : (java.lang.Integer) defaultValue(fields()[3]);
+        record.timestamp = fieldSetFlags()[4] ? this.timestamp : (java.time.Instant) defaultValue(fields()[4]);
         return record;
       } catch (org.apache.avro.AvroMissingFieldException e) {
         throw e;
@@ -490,59 +579,6 @@ public class client_credit_score extends org.apache.avro.specific.SpecificRecord
     READER$.read(this, SpecificData.getDecoder(in));
   }
 
-  @Override protected boolean hasCustomCoders() { return true; }
-
-  @Override public void customEncode(org.apache.avro.io.Encoder out)
-    throws java.io.IOException
-  {
-    out.writeInt(this.id);
-
-    out.writeString(this.firstname);
-
-    out.writeString(this.lastname);
-
-    out.writeInt(this.credit_score);
-
-  }
-
-  @Override public void customDecode(org.apache.avro.io.ResolvingDecoder in)
-    throws java.io.IOException
-  {
-    org.apache.avro.Schema.Field[] fieldOrder = in.readFieldOrderIfDiff();
-    if (fieldOrder == null) {
-      this.id = in.readInt();
-
-      this.firstname = in.readString();
-
-      this.lastname = in.readString();
-
-      this.credit_score = in.readInt();
-
-    } else {
-      for (int i = 0; i < 4; i++) {
-        switch (fieldOrder[i].pos()) {
-        case 0:
-          this.id = in.readInt();
-          break;
-
-        case 1:
-          this.firstname = in.readString();
-          break;
-
-        case 2:
-          this.lastname = in.readString();
-          break;
-
-        case 3:
-          this.credit_score = in.readInt();
-          break;
-
-        default:
-          throw new java.io.IOException("Corrupt ResolvingDecoder.");
-        }
-      }
-    }
-  }
 }
 
 

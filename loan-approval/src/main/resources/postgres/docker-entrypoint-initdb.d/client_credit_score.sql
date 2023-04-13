@@ -2,7 +2,8 @@ CREATE TABLE client_credit_score (
     id SERIAL PRIMARY KEY not null,
     firstname varchar(50) not null,
     lastname varchar(50) not null,
-    credit_score integer not null
+    credit_score integer not null,
+    timestamp timestamp default current_timestamp not null
 );
 
 INSERT INTO client_credit_score (firstname, lastname, credit_score) VALUES

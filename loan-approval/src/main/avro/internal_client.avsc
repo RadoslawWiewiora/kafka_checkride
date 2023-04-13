@@ -16,6 +16,15 @@
     {
       "name": "credit_score",
       "type": "int"
+    },
+    {
+      "name": "timestamp",
+      "type": {
+        "connect.name": "org.apache.kafka.connect.data.Timestamp",
+        "connect.version": 1,
+        "logicalType": "timestamp-millis",
+        "type": "long"
+      }
     }
   ],
   "name": "client_credit_score",

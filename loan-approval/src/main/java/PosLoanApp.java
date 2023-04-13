@@ -42,7 +42,7 @@ public class PosLoanApp {
         }
 
         for (ConsumerRecord<String, LoanDecision> record : records) {
-            log.info("LOAN DECISION: " + record.value());
+            log.warn("LOAN DECISION: " + record.value());
         }
     }
 
@@ -50,7 +50,9 @@ public class PosLoanApp {
 
         try (KafkaProducer<String, LoanRequest> producer = new KafkaProducer<>(getProducerConfig())) {
             producer.send(generateRequest("John", "1"));
+            log.warn("REQUEST for John");
             producer.send(generateRequest("Ann", "100"));
+            log.warn("REQUEST for Ann");
             producer.flush();
         }
     }
