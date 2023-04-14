@@ -1,0 +1,14 @@
+{
+  "name": "DecisionsSink",
+  "config": {
+    "name": "DecisionsSink",
+    "connector.class": "io.confluent.connect.jdbc.JdbcSinkConnector",
+    "topics": "loan_decisions",
+    "connection.url": "jdbc:postgresql://postgres:5432/postgres",
+    "connection.user": "postgres",
+    "table.name.format": "decisions",
+    "auto.create": "true",
+    "auto.evolve": "false",
+    "quote.sql.identifiers": "never"
+  }
+}

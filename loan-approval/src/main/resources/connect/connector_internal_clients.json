@@ -1,5 +1,5 @@
 {
-  "name": "Internal-Clients-Connector-Avro",
+  "name": "InternalClientsSource",
   "config": {
     "connector.class": "io.confluent.connect.jdbc.JdbcSourceConnector",
     "key.converter": "org.apache.kafka.connect.storage.StringConverter",

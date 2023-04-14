@@ -17,9 +17,13 @@ Install connect JDBC plugin:
 
 1. docker-compose exec -u root connect confluent-hub install confluentinc/kafka-connect-jdbc:10.0.0
 2. docker-compose restart connect
-3. add connector:
+3. add connector for internal clients (source connector):
    curl -X POST -H "Content-Type: application/json" \
-   --data-binary "@loan-approval/src/main/resources/connect/connector_Internal-Clients-Connector-Avro_config.json" \
+   --data-binary "@loan-approval/src/main/resources/connect/connector_internal_clients.json" \
+   http://localhost:8083/connectors
+4. add connector for loan decisions (sink connector):
+   curl -X POST -H "Content-Type: application/json" \
+   --data-binary "@loan-approval/src/main/resources/connect/connector_decisions.json" \
    http://localhost:8083/connectors
 
 Reset consumer group offset (open docker broker terminal)
