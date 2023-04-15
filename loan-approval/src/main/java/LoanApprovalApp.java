@@ -35,7 +35,7 @@ public class LoanApprovalApp {
         return props;
     }
 
-    private static Topology getTopology() {
+    public static Topology getTopology() {
 
         StreamsBuilder builder = new StreamsBuilder();
 

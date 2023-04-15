@@ -23,5 +23,6 @@
 hs_err_pid*
 /loan-approval/build/resources/
 /loan-approval/build/scripts/
-/loan-approval/build/resources/
 /loan-approval/build/resources/main/
+/loan-approval/build/test-results/
+/loan-approval/build/reports/
