@@ -23,8 +23,6 @@ public class LoanDecisionMakerTest {
         props.put(StreamsConfig.APPLICATION_ID_CONFIG, "test");
         props.put("schema.registry.url", "mock://test");
         props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "dummy:1234");
-        props.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.String().getClass().getName());
-        props.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, SpecificAvroSerde.class);
     }
 
     @Test
@@ -33,7 +31,7 @@ public class LoanDecisionMakerTest {
         final SpecificAvroSerde<LoanDecision> decisionSerde = Utils.getAvroSerde(props);
         final Serde<String> stringSerde = Serdes.String();
 
-        try (final TopologyTestDriver testDriver = new TopologyTestDriver(LoanApprovalApp.getTopology(), props)) {
+        try (final TopologyTestDriver testDriver = new TopologyTestDriver(LoanApprovalApp.getTopology(props), props)) {
 
             final TestInputTopic<String, LoanRequest> requestsTopic = testDriver.createInputTopic(
                     Constants.LOAN_REQUESTS_TOPIC,
@@ -67,7 +65,7 @@ public class LoanDecisionMakerTest {
         final SpecificAvroSerde<LoanDecision> decisionSerde = Utils.getAvroSerde(props);
         final Serde<String> stringSerde = Serdes.String();
 
-        try (final TopologyTestDriver testDriver = new TopologyTestDriver(LoanApprovalApp.getTopology(), props)) {
+        try (final TopologyTestDriver testDriver = new TopologyTestDriver(LoanApprovalApp.getTopology(props), props)) {
 
             final TestInputTopic<String, LoanRequest> requestsTopic = testDriver.createInputTopic(
                     Constants.LOAN_REQUESTS_TOPIC,

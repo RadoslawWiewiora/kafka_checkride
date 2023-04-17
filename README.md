@@ -45,4 +45,7 @@ Use config file (loan-approval/src/main/resources/connect/connector_Internal-Cli
 
 #### Test on local environment 
 Open terminal and produce some loan application
+
+Run application:
+
 Open another terminal and check results
