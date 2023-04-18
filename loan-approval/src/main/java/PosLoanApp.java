@@ -1,6 +1,8 @@
 import io.confluent.kafka.serializers.AbstractKafkaSchemaSerDeConfig;
 import io.confluent.kafka.serializers.KafkaAvroDeserializer;
 import io.confluent.kafka.serializers.KafkaAvroSerializer;
+import org.ajbrown.namemachine.Name;
+import org.ajbrown.namemachine.NameGenerator;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
@@ -16,6 +18,7 @@ import pojo.avro.LoanDecision;
 import pojo.avro.LoanRequest;
 
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 import java.util.Random;
@@ -24,13 +27,22 @@ public class PosLoanApp {
 
     private static final Logger log = LoggerFactory.getLogger(PosLoanApp.class.getSimpleName());
 
+    private final Random randomNum = new Random();
+
+    private List<ProducerRecord<String, LoanRequest>> bfbClients;
+
     public static void main(String[] args) {
 
-        sendLoanRequest();
-        readLoanDecision();
+        PosLoanApp app = new PosLoanApp();
+        app.populateBfbClients();
+
+        app.sendLoanRequestForInternalClient();
+        app.sendLoanRequestForExternalClient();
+
+        app.readLoanDecision();
     }
 
-    public static void readLoanDecision() {
+    public void readLoanDecision() {
 
         // create a consumer
         ConsumerRecords<String, LoanDecision> records;
@@ -46,28 +58,52 @@ public class PosLoanApp {
         }
     }
 
-    public static void sendLoanRequest() {
+    public void sendLoanRequestForInternalClient() {
 
         try (KafkaProducer<String, LoanRequest> producer = new KafkaProducer<>(getProducerConfig())) {
-            producer.send(generateRequest("John", "1"));
-            log.warn("REQUEST for John");
-            producer.send(generateRequest("Ann", "100"));
-            log.warn("REQUEST for Ann");
-            producer.flush();
+            ProducerRecord<String, LoanRequest> internal = this.bfbClients.get(this.randomNum.nextInt(10));
+            producer.send(internal);
+            log.warn("REQUEST for: " + internal.value().getName() + " " + internal.value().getSurname());
         }
     }
 
-    public static ProducerRecord<String, LoanRequest> generateRequest(String name, String key) {
+    public void sendLoanRequestForExternalClient() {
+
+        try (KafkaProducer<String, LoanRequest> producer = new KafkaProducer<>(getProducerConfig())) {
+            NameGenerator generator = new NameGenerator();
+            Name name = generator.generateName();
+            String key = String.valueOf(randomNum.nextInt());
+            ProducerRecord<String, LoanRequest> external = generateRequest(name.getFirstName(), name.getLastName(), key);
+            producer.send(external);
+            log.warn("REQUEST for: " + external.value().getName() + " " + external.value().getSurname());
+        }
+    }
+
+    private ProducerRecord<String, LoanRequest> generateRequest(String name, String surname, String key) {
+
         // Sample loan request
-        Random randomNum = new Random();
         LoanRequest application = new LoanRequest();
         application.setName(name);
-        application.setSurname("Smith");
+        application.setSurname(surname);
         application.setAmount(randomNum.nextInt(100, 5000));
 
         // For topic key I would like to use hash code of client PII data
         // Integer key = (application.getName() + application.getSurname()).hashCode();
         return new ProducerRecord<>(Constants.LOAN_REQUESTS_TOPIC, key, application);
+    }
+
+    public void populateBfbClients() {
+        this.bfbClients = new ArrayList<>();
+        this.bfbClients.add(generateRequest("John", "Smith", "1"));
+        this.bfbClients.add(generateRequest("Ann", "Johnson", "2"));
+        this.bfbClients.add(generateRequest("Henry", "Smith", "3"));
+        this.bfbClients.add(generateRequest("Emile", "Miller", "4"));
+        this.bfbClients.add(generateRequest("Mike", "Smith", "5"));
+        this.bfbClients.add(generateRequest("John", "Johnson", "6"));
+        this.bfbClients.add(generateRequest("Ann", "Miller", "7"));
+        this.bfbClients.add(generateRequest("Henry", "Smith", "8"));
+        this.bfbClients.add(generateRequest("Emile", "Smith", "9"));
+        this.bfbClients.add(generateRequest("Mike", "Johnson", "10"));
     }
 
     public static Properties getProducerConfig() {
