@@ -19,11 +19,15 @@ Install connect JDBC plugin:
 2. docker-compose restart connect
 3. add connector for internal clients (source connector):
    curl -X POST -H "Content-Type: application/json" \
-   --data-binary "@loan-approval/src/main/resources/connect/connector_internal_clients.json" \
+   --data-binary "@loan-approval/src/main/resources/connect/connector_internal_scores.json" \
    http://localhost:8083/connectors
 4. add connector for loan decisions (sink connector):
    curl -X POST -H "Content-Type: application/json" \
    --data-binary "@loan-approval/src/main/resources/connect/connector_decisions.json" \
+   http://localhost:8083/connectors
+5. add connector for loan decisions (sink connector):
+   curl -X POST -H "Content-Type: application/json" \
+   --data-binary "@loan-approval/src/main/resources/connect/connector_external_scores.json" \
    http://localhost:8083/connectors
 
 Reset consumer group offset (open docker broker terminal)
@@ -49,3 +53,7 @@ Open terminal and produce some loan application
 Run application:
 
 Open another terminal and check results
+
+
+Access to Postgres:
+psql -h postgres -U postgres

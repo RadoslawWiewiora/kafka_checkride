@@ -1,5 +1,5 @@
 {
-  "connect.name": "client_credit_score",
+  "connect.name": "credit_scores",
   "fields": [
     {
       "name": "id",
@@ -27,6 +27,6 @@
       }
     }
   ],
-  "name": "client_credit_score",
+  "name": "credit_scores",
   "type": "record"
 }

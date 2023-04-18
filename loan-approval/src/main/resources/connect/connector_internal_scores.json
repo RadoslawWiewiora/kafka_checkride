@@ -1,12 +1,12 @@
 {
-  "name": "InternalClientsSource",
+  "name": "InternalCreditScoreSource",
   "config": {
     "connector.class": "io.confluent.connect.jdbc.JdbcSourceConnector",
     "key.converter": "org.apache.kafka.connect.storage.StringConverter",
     "value.converter": "io.confluent.connect.avro.AvroConverter",
     "connection.url": "jdbc:postgresql://postgres:5432/postgres",
     "connection.user": "postgres",
-    "table.whitelist": "client_credit_score",
+    "table.whitelist": "credit_scores",
     "numeric.mapping": "best_fit",
     "dialect.name": "PostgreSqlDatabaseDialect",
     "mode": "timestamp+incrementing",

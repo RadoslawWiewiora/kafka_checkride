@@ -1,0 +1,14 @@
+{
+  "name": "ExternalCreditScoresSink",
+  "config": {
+    "name": "ExternalCreditScoresSink",
+    "connector.class": "io.confluent.connect.jdbc.JdbcSinkConnector",
+    "topics": "external_credit_scores",
+    "connection.url": "jdbc:postgresql://postgres:5432/postgres",
+    "connection.user": "postgres",
+    "table.name.format": "external_credit_scores",
+    "auto.create": "true",
+    "auto.evolve": "false",
+    "quote.sql.identifiers": "never"
+  }
+}

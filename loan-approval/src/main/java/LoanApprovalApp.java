@@ -39,35 +39,44 @@ public class LoanApprovalApp {
         StreamsBuilder builder = new StreamsBuilder();
         final Serde<String> stringSerde = Serdes.String();
         final SpecificAvroSerde<LoanRequest> requestSerde = Utils.getAvroSerde(properties);
+        final SpecificAvroSerde<LoanRequestsWithCreditScore> withScoreSerde = Utils.getAvroSerde(properties);
         final SpecificAvroSerde<LoanDecision> decisionSerde = Utils.getAvroSerde(properties);
-        final SpecificAvroSerde<client_credit_score> clientSerde = Utils.getAvroSerde(properties);
+        final SpecificAvroSerde<credit_scores> clientSerde = Utils.getAvroSerde(properties);
 
         // Source processor: get loan applications from Kafka topic
-        KStream<String, LoanRequest> loanApplicationsStream = builder
-                .stream(Constants.LOAN_REQUESTS_TOPIC,
-                        Consumed.with(stringSerde, requestSerde).withName("Loan_requests"));
+        KStream<String, LoanRequest> loanApplicationsStream = builder.stream(
+                Constants.LOAN_REQUESTS_TOPIC,
+                Consumed.with(stringSerde, requestSerde).withName("Loan_requests"));
 
         // Source processor: get internal clients credit scores from Kafka topic
-        KTable<String, client_credit_score> internalClientsStream = builder
-                .table(Constants.INTERNAL_CLIENTS_TOPIC,
-                        Consumed.with(stringSerde, clientSerde).withName("BFG_clients"));
+        KTable<String, credit_scores> internalClientsStream = builder.table(
+                Constants.INTERNAL_CREDIT_SCORES_TOPIC,
+                Consumed.with(stringSerde, clientSerde).withName("BFG_clients"));
 
-        // Internal processor: Join loan requests with internal clients credit score
+        // Source processor: get internal clients credit scores from Kafka topic
+        KStream<String, LoanRequestsWithCreditScore> externalCreditScores = builder.stream(
+                Constants.EXTERNAL_CREDIT_SCORES_TOPIC,
+                Consumed.with(stringSerde, withScoreSerde).withName("External_credit_scores"));
+
+        // Internal processor: Join loan requests with BFG clients credit score
         LoanRequestCreditScoreJoiner joiner = new LoanRequestCreditScoreJoiner();
-        KStream<String, LoanRequestsWithCreditScore> joined = loanApplicationsStream
-                .leftJoin(internalClientsStream,
-                        joiner,
-                        Joined.with(stringSerde, requestSerde, clientSerde).withName("Enriched_with_BFB_data"));
+        KStream<String, LoanRequestsWithCreditScore> joined = loanApplicationsStream.leftJoin(
+                internalClientsStream,
+                joiner,
+                Joined.with(stringSerde, requestSerde, clientSerde).withName("Enriched_with_BFB_data"));
 
         KStream<String, LoanRequestsWithCreditScore> withoutCreditScore = joined
                 .filter((k, v) -> v.getCreditScoreSource() == null, Named.as("Without_credit_score"));
         KStream<String, LoanRequestsWithCreditScore> withInternalCreditScore = joined
                 .filter((k, v) -> v.getCreditScoreSource() != null, Named.as("BFB_credit_score"));
 
-        KStream<String, LoanRequestsWithCreditScore> withExternalCreditScore = withoutCreditScore
-                .mapValues(CreditBureauMock::addCreditScore, Named.as("Credit_bureau_credit_score"));
+        withoutCreditScore
+                .mapValues(CreditBureauMock::addCreditScore, Named.as("Add_credit_bureau_credit_score"))
+                .to(Constants.EXTERNAL_CREDIT_SCORES_TOPIC,
+                    Produced.with(stringSerde, withScoreSerde).withName(Constants.EXTERNAL_CREDIT_SCORES_TOPIC));
+
         KStream<String, LoanRequestsWithCreditScore> withCreditScore = withInternalCreditScore
-                .merge(withExternalCreditScore, Named.as("With_credit_score"));
+                .merge(externalCreditScores, Named.as("With_credit_score"));
 
         // Internal processor: make decision based on credit score
         KStream<String, LoanDecision> decisionStream = withCreditScore

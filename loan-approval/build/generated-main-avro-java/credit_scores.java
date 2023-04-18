@@ -12,11 +12,11 @@ import org.apache.avro.message.BinaryMessageDecoder;
 import org.apache.avro.message.SchemaStore;
 
 @org.apache.avro.specific.AvroGenerated
-public class client_credit_score extends org.apache.avro.specific.SpecificRecordBase implements org.apache.avro.specific.SpecificRecord {
-  private static final long serialVersionUID = -3437212297535105357L;
+public class credit_scores extends org.apache.avro.specific.SpecificRecordBase implements org.apache.avro.specific.SpecificRecord {
+  private static final long serialVersionUID = 7269728264876643287L;
 
 
-  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"client_credit_score\",\"fields\":[{\"name\":\"id\",\"type\":\"int\"},{\"name\":\"firstname\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"}},{\"name\":\"lastname\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"}},{\"name\":\"credit_score\",\"type\":\"int\"},{\"name\":\"timestamp\",\"type\":{\"type\":\"long\",\"connect.name\":\"org.apache.kafka.connect.data.Timestamp\",\"connect.version\":1,\"logicalType\":\"timestamp-millis\"}}],\"connect.name\":\"client_credit_score\"}");
+  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"credit_scores\",\"fields\":[{\"name\":\"id\",\"type\":\"int\"},{\"name\":\"firstname\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"}},{\"name\":\"lastname\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"}},{\"name\":\"credit_score\",\"type\":\"int\"},{\"name\":\"timestamp\",\"type\":{\"type\":\"long\",\"connect.name\":\"org.apache.kafka.connect.data.Timestamp\",\"connect.version\":1,\"logicalType\":\"timestamp-millis\"}}],\"connect.name\":\"credit_scores\"}");
   public static org.apache.avro.Schema getClassSchema() { return SCHEMA$; }
 
   private static final SpecificData MODEL$ = new SpecificData();
@@ -24,17 +24,17 @@ public class client_credit_score extends org.apache.avro.specific.SpecificRecord
     MODEL$.addLogicalTypeConversion(new org.apache.avro.data.TimeConversions.TimestampMillisConversion());
   }
 
-  private static final BinaryMessageEncoder<client_credit_score> ENCODER =
+  private static final BinaryMessageEncoder<credit_scores> ENCODER =
       new BinaryMessageEncoder<>(MODEL$, SCHEMA$);
 
-  private static final BinaryMessageDecoder<client_credit_score> DECODER =
+  private static final BinaryMessageDecoder<credit_scores> DECODER =
       new BinaryMessageDecoder<>(MODEL$, SCHEMA$);
 
   /**
    * Return the BinaryMessageEncoder instance used by this class.
    * @return the message encoder used by this class
    */
-  public static BinaryMessageEncoder<client_credit_score> getEncoder() {
+  public static BinaryMessageEncoder<credit_scores> getEncoder() {
     return ENCODER;
   }
 
@@ -42,7 +42,7 @@ public class client_credit_score extends org.apache.avro.specific.SpecificRecord
    * Return the BinaryMessageDecoder instance used by this class.
    * @return the message decoder used by this class
    */
-  public static BinaryMessageDecoder<client_credit_score> getDecoder() {
+  public static BinaryMessageDecoder<credit_scores> getDecoder() {
     return DECODER;
   }
 
@@ -51,12 +51,12 @@ public class client_credit_score extends org.apache.avro.specific.SpecificRecord
    * @param resolver a {@link SchemaStore} used to find schemas by fingerprint
    * @return a BinaryMessageDecoder instance for this class backed by the given SchemaStore
    */
-  public static BinaryMessageDecoder<client_credit_score> createDecoder(SchemaStore resolver) {
+  public static BinaryMessageDecoder<credit_scores> createDecoder(SchemaStore resolver) {
     return new BinaryMessageDecoder<>(MODEL$, SCHEMA$, resolver);
   }
 
   /**
-   * Serializes this client_credit_score to a ByteBuffer.
+   * Serializes this credit_scores to a ByteBuffer.
    * @return a buffer holding the serialized data for this instance
    * @throws java.io.IOException if this instance could not be serialized
    */
@@ -65,12 +65,12 @@ public class client_credit_score extends org.apache.avro.specific.SpecificRecord
   }
 
   /**
-   * Deserializes a client_credit_score from a ByteBuffer.
+   * Deserializes a credit_scores from a ByteBuffer.
    * @param b a byte buffer holding serialized data for an instance of this class
-   * @return a client_credit_score instance decoded from the given buffer
+   * @return a credit_scores instance decoded from the given buffer
    * @throws java.io.IOException if the given bytes could not be deserialized into an instance of this class
    */
-  public static client_credit_score fromByteBuffer(
+  public static credit_scores fromByteBuffer(
       java.nio.ByteBuffer b) throws java.io.IOException {
     return DECODER.decode(b);
   }
@@ -86,7 +86,7 @@ public class client_credit_score extends org.apache.avro.specific.SpecificRecord
    * to their default values from the schema.  If that is desired then
    * one should use <code>newBuilder()</code>.
    */
-  public client_credit_score() {}
+  public credit_scores() {}
 
   /**
    * All-args constructor.
@@ -96,7 +96,7 @@ public class client_credit_score extends org.apache.avro.specific.SpecificRecord
    * @param credit_score The new value for credit_score
    * @param timestamp The new value for timestamp
    */
-  public client_credit_score(java.lang.Integer id, java.lang.String firstname, java.lang.String lastname, java.lang.Integer credit_score, java.time.Instant timestamp) {
+  public credit_scores(java.lang.Integer id, java.lang.String firstname, java.lang.String lastname, java.lang.Integer credit_score, java.time.Instant timestamp) {
     this.id = id;
     this.firstname = firstname;
     this.lastname = lastname;
@@ -238,45 +238,45 @@ public class client_credit_score extends org.apache.avro.specific.SpecificRecord
   }
 
   /**
-   * Creates a new client_credit_score RecordBuilder.
-   * @return A new client_credit_score RecordBuilder
+   * Creates a new credit_scores RecordBuilder.
+   * @return A new credit_scores RecordBuilder
    */
-  public static client_credit_score.Builder newBuilder() {
-    return new client_credit_score.Builder();
+  public static credit_scores.Builder newBuilder() {
+    return new credit_scores.Builder();
   }
 
   /**
-   * Creates a new client_credit_score RecordBuilder by copying an existing Builder.
+   * Creates a new credit_scores RecordBuilder by copying an existing Builder.
    * @param other The existing builder to copy.
-   * @return A new client_credit_score RecordBuilder
+   * @return A new credit_scores RecordBuilder
    */
-  public static client_credit_score.Builder newBuilder(client_credit_score.Builder other) {
+  public static credit_scores.Builder newBuilder(credit_scores.Builder other) {
     if (other == null) {
-      return new client_credit_score.Builder();
+      return new credit_scores.Builder();
     } else {
-      return new client_credit_score.Builder(other);
+      return new credit_scores.Builder(other);
     }
   }
 
   /**
-   * Creates a new client_credit_score RecordBuilder by copying an existing client_credit_score instance.
+   * Creates a new credit_scores RecordBuilder by copying an existing credit_scores instance.
    * @param other The existing instance to copy.
-   * @return A new client_credit_score RecordBuilder
+   * @return A new credit_scores RecordBuilder
    */
-  public static client_credit_score.Builder newBuilder(client_credit_score other) {
+  public static credit_scores.Builder newBuilder(credit_scores other) {
     if (other == null) {
-      return new client_credit_score.Builder();
+      return new credit_scores.Builder();
     } else {
-      return new client_credit_score.Builder(other);
+      return new credit_scores.Builder(other);
     }
   }
 
   /**
-   * RecordBuilder for client_credit_score instances.
+   * RecordBuilder for credit_scores instances.
    */
   @org.apache.avro.specific.AvroGenerated
-  public static class Builder extends org.apache.avro.specific.SpecificRecordBuilderBase<client_credit_score>
-    implements org.apache.avro.data.RecordBuilder<client_credit_score> {
+  public static class Builder extends org.apache.avro.specific.SpecificRecordBuilderBase<credit_scores>
+    implements org.apache.avro.data.RecordBuilder<credit_scores> {
 
     private int id;
     private java.lang.String firstname;
@@ -293,7 +293,7 @@ public class client_credit_score extends org.apache.avro.specific.SpecificRecord
      * Creates a Builder by copying an existing Builder.
      * @param other The existing Builder to copy.
      */
-    private Builder(client_credit_score.Builder other) {
+    private Builder(credit_scores.Builder other) {
       super(other);
       if (isValidValue(fields()[0], other.id)) {
         this.id = data().deepCopy(fields()[0].schema(), other.id);
@@ -318,10 +318,10 @@ public class client_credit_score extends org.apache.avro.specific.SpecificRecord
     }
 
     /**
-     * Creates a Builder by copying an existing client_credit_score instance
+     * Creates a Builder by copying an existing credit_scores instance
      * @param other The existing instance to copy.
      */
-    private Builder(client_credit_score other) {
+    private Builder(credit_scores other) {
       super(SCHEMA$, MODEL$);
       if (isValidValue(fields()[0], other.id)) {
         this.id = data().deepCopy(fields()[0].schema(), other.id);
@@ -359,7 +359,7 @@ public class client_credit_score extends org.apache.avro.specific.SpecificRecord
       * @param value The value of 'id'.
       * @return This builder.
       */
-    public client_credit_score.Builder setId(int value) {
+    public credit_scores.Builder setId(int value) {
       validate(fields()[0], value);
       this.id = value;
       fieldSetFlags()[0] = true;
@@ -379,7 +379,7 @@ public class client_credit_score extends org.apache.avro.specific.SpecificRecord
       * Clears the value of the 'id' field.
       * @return This builder.
       */
-    public client_credit_score.Builder clearId() {
+    public credit_scores.Builder clearId() {
       fieldSetFlags()[0] = false;
       return this;
     }
@@ -398,7 +398,7 @@ public class client_credit_score extends org.apache.avro.specific.SpecificRecord
       * @param value The value of 'firstname'.
       * @return This builder.
       */
-    public client_credit_score.Builder setFirstname(java.lang.String value) {
+    public credit_scores.Builder setFirstname(java.lang.String value) {
       validate(fields()[1], value);
       this.firstname = value;
       fieldSetFlags()[1] = true;
@@ -418,7 +418,7 @@ public class client_credit_score extends org.apache.avro.specific.SpecificRecord
       * Clears the value of the 'firstname' field.
       * @return This builder.
       */
-    public client_credit_score.Builder clearFirstname() {
+    public credit_scores.Builder clearFirstname() {
       firstname = null;
       fieldSetFlags()[1] = false;
       return this;
@@ -438,7 +438,7 @@ public class client_credit_score extends org.apache.avro.specific.SpecificRecord
       * @param value The value of 'lastname'.
       * @return This builder.
       */
-    public client_credit_score.Builder setLastname(java.lang.String value) {
+    public credit_scores.Builder setLastname(java.lang.String value) {
       validate(fields()[2], value);
       this.lastname = value;
       fieldSetFlags()[2] = true;
@@ -458,7 +458,7 @@ public class client_credit_score extends org.apache.avro.specific.SpecificRecord
       * Clears the value of the 'lastname' field.
       * @return This builder.
       */
-    public client_credit_score.Builder clearLastname() {
+    public credit_scores.Builder clearLastname() {
       lastname = null;
       fieldSetFlags()[2] = false;
       return this;
@@ -478,7 +478,7 @@ public class client_credit_score extends org.apache.avro.specific.SpecificRecord
       * @param value The value of 'credit_score'.
       * @return This builder.
       */
-    public client_credit_score.Builder setCreditScore(int value) {
+    public credit_scores.Builder setCreditScore(int value) {
       validate(fields()[3], value);
       this.credit_score = value;
       fieldSetFlags()[3] = true;
@@ -498,7 +498,7 @@ public class client_credit_score extends org.apache.avro.specific.SpecificRecord
       * Clears the value of the 'credit_score' field.
       * @return This builder.
       */
-    public client_credit_score.Builder clearCreditScore() {
+    public credit_scores.Builder clearCreditScore() {
       fieldSetFlags()[3] = false;
       return this;
     }
@@ -517,7 +517,7 @@ public class client_credit_score extends org.apache.avro.specific.SpecificRecord
       * @param value The value of 'timestamp'.
       * @return This builder.
       */
-    public client_credit_score.Builder setTimestamp(java.time.Instant value) {
+    public credit_scores.Builder setTimestamp(java.time.Instant value) {
       validate(fields()[4], value);
       this.timestamp = value.truncatedTo(java.time.temporal.ChronoUnit.MILLIS);
       fieldSetFlags()[4] = true;
@@ -537,16 +537,16 @@ public class client_credit_score extends org.apache.avro.specific.SpecificRecord
       * Clears the value of the 'timestamp' field.
       * @return This builder.
       */
-    public client_credit_score.Builder clearTimestamp() {
+    public credit_scores.Builder clearTimestamp() {
       fieldSetFlags()[4] = false;
       return this;
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public client_credit_score build() {
+    public credit_scores build() {
       try {
-        client_credit_score record = new client_credit_score();
+        credit_scores record = new credit_scores();
         record.id = fieldSetFlags()[0] ? this.id : (java.lang.Integer) defaultValue(fields()[0]);
         record.firstname = fieldSetFlags()[1] ? this.firstname : (java.lang.String) defaultValue(fields()[1]);
         record.lastname = fieldSetFlags()[2] ? this.lastname : (java.lang.String) defaultValue(fields()[2]);
@@ -562,8 +562,8 @@ public class client_credit_score extends org.apache.avro.specific.SpecificRecord
   }
 
   @SuppressWarnings("unchecked")
-  private static final org.apache.avro.io.DatumWriter<client_credit_score>
-    WRITER$ = (org.apache.avro.io.DatumWriter<client_credit_score>)MODEL$.createDatumWriter(SCHEMA$);
+  private static final org.apache.avro.io.DatumWriter<credit_scores>
+    WRITER$ = (org.apache.avro.io.DatumWriter<credit_scores>)MODEL$.createDatumWriter(SCHEMA$);
 
   @Override public void writeExternal(java.io.ObjectOutput out)
     throws java.io.IOException {
@@ -571,8 +571,8 @@ public class client_credit_score extends org.apache.avro.specific.SpecificRecord
   }
 
   @SuppressWarnings("unchecked")
-  private static final org.apache.avro.io.DatumReader<client_credit_score>
-    READER$ = (org.apache.avro.io.DatumReader<client_credit_score>)MODEL$.createDatumReader(SCHEMA$);
+  private static final org.apache.avro.io.DatumReader<credit_scores>
+    READER$ = (org.apache.avro.io.DatumReader<credit_scores>)MODEL$.createDatumReader(SCHEMA$);
 
   @Override public void readExternal(java.io.ObjectInput in)
     throws java.io.IOException {

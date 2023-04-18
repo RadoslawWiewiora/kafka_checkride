@@ -61,7 +61,7 @@ public class LoanDecisionMakerTest {
     @Test
     public void shouldMakeDecisionForInternalClient() {
         final SpecificAvroSerde<LoanRequest> requestSerde = Utils.getAvroSerde(props);
-        final SpecificAvroSerde<client_credit_score> clientSerde = Utils.getAvroSerde(props);
+        final SpecificAvroSerde<credit_scores> clientSerde = Utils.getAvroSerde(props);
         final SpecificAvroSerde<LoanDecision> decisionSerde = Utils.getAvroSerde(props);
         final Serde<String> stringSerde = Serdes.String();
 
@@ -74,8 +74,8 @@ public class LoanDecisionMakerTest {
                     Instant.ofEpochMilli(0L),
                     Duration.ZERO);
 
-            final TestInputTopic<String, client_credit_score> clientsTopic = testDriver.createInputTopic(
-                    Constants.INTERNAL_CLIENTS_TOPIC,
+            final TestInputTopic<String, credit_scores> clientsTopic = testDriver.createInputTopic(
+                    Constants.INTERNAL_CREDIT_SCORES_TOPIC,
                     stringSerde.serializer(),
                     clientSerde.serializer(),
                     Instant.ofEpochMilli(0L),
@@ -89,7 +89,7 @@ public class LoanDecisionMakerTest {
             // Mock records for the test
             LoanRequest ann = LoanRequest.newBuilder()
                     .setName("Anna").setSurname("Smith").setAmount(100).build();
-            client_credit_score creditScore = client_credit_score.newBuilder()
+            credit_scores creditScore = credit_scores.newBuilder()
                     .setCreditScore(90).setFirstname("Anna").setLastname("Smith")
                     .setId(1).setTimestamp(Instant.now()).build();
 

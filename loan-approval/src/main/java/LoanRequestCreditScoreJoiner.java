@@ -2,9 +2,9 @@ import org.apache.kafka.streams.kstream.ValueJoiner;
 import pojo.avro.LoanRequest;
 import pojo.avro.LoanRequestsWithCreditScore;
 
-public class LoanRequestCreditScoreJoiner implements ValueJoiner<LoanRequest, client_credit_score, LoanRequestsWithCreditScore> {
+public class LoanRequestCreditScoreJoiner implements ValueJoiner<LoanRequest, credit_scores, LoanRequestsWithCreditScore> {
     @Override
-    public LoanRequestsWithCreditScore apply(LoanRequest request, client_credit_score creditScore) {
+    public LoanRequestsWithCreditScore apply(LoanRequest request, credit_scores creditScore) {
 
         LoanRequestsWithCreditScore withCreditScore = new LoanRequestsWithCreditScore();
         withCreditScore.setName(request.getName());
