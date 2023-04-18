@@ -65,7 +65,9 @@ Access to Postgres:
       psql -h postgres -U postgres
 
 #### Test on local environment 
-Open terminal and run LoanApprovalApp, then open in another terminal PosLoanApp.
+Open terminal and run LoanApprovalApp, then open in another terminal PosProducerApp.
+
+        ./kafka-avro-console-consumer --bootstrap-server localhost:9092 --topic loan_decisions
 
 
 

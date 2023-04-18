@@ -1,31 +1,25 @@
 import io.confluent.kafka.serializers.AbstractKafkaSchemaSerDeConfig;
-import io.confluent.kafka.serializers.KafkaAvroDeserializer;
 import io.confluent.kafka.serializers.KafkaAvroSerializer;
 import org.ajbrown.namemachine.Name;
 import org.ajbrown.namemachine.NameGenerator;
-import org.apache.kafka.clients.consumer.ConsumerConfig;
-import org.apache.kafka.clients.consumer.ConsumerRecord;
-import org.apache.kafka.clients.consumer.ConsumerRecords;
-import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.ProducerRecord;
-import org.apache.kafka.common.serialization.StringDeserializer;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import pojo.avro.LoanDecision;
 import pojo.avro.LoanRequest;
 
-import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 import java.util.Random;
 
-public class PosLoanApp {
+public class PosProducerApp {
 
-    private static final Logger log = LoggerFactory.getLogger(PosLoanApp.class.getSimpleName());
+    private static final Logger log = LoggerFactory.getLogger(PosProducerApp.class.getSimpleName());
+
+    private static boolean produce = true;
 
     private final Random randomNum = new Random();
 
@@ -33,29 +27,18 @@ public class PosLoanApp {
 
     public static void main(String[] args) {
 
-        PosLoanApp app = new PosLoanApp();
+        PosProducerApp app = new PosProducerApp();
         app.populateBfbClients();
 
-        app.sendLoanRequestForInternalClient();
-        app.sendLoanRequestForExternalClient();
-
-        app.readLoanDecision();
-    }
-
-    public void readLoanDecision() {
-
-        // create a consumer
-        ConsumerRecords<String, LoanDecision> records;
-        try (KafkaConsumer<String, LoanDecision> consumer = new KafkaConsumer<>(getConsumerConfig())) {
-
-            // subscribe to a topic
-            consumer.subscribe(List.of(Constants.LOAN_DECISIONS_TOPIC));
-            records = consumer.poll(Duration.ofMillis(1000));
+        while (produce) {
+            app.sendLoanRequestForInternalClient();
+            app.sendLoanRequestForExternalClient();
         }
 
-        for (ConsumerRecord<String, LoanDecision> record : records) {
-            log.warn("LOAN DECISION: " + record.value());
-        }
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            System.out.println("Shutting down producer...");
+            produce = false;
+        }));
     }
 
     public void sendLoanRequestForInternalClient() {
@@ -113,20 +96,6 @@ public class PosLoanApp {
         props.put(AbstractKafkaSchemaSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG, Constants.SCHEMA_REGISTRY_URL_CONFIG);
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, KafkaAvroSerializer.class);
-
-        return props;
-    }
-
-    public static Properties getConsumerConfig() {
-        final Properties props = new Properties();
-
-        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, Constants.BOOTSTRAP_SERVERS_CONFIG);
-        props.put(AbstractKafkaSchemaSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG, Constants.SCHEMA_REGISTRY_URL_CONFIG);
-        props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
-        props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, KafkaAvroDeserializer.class);
-        props.put(ConsumerConfig.GROUP_ID_CONFIG, "POS-Applications");
-        props.put(ConsumerConfig.CLIENT_ID_CONFIG, "POS-Applications-1");
-        props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
 
         return props;
     }
