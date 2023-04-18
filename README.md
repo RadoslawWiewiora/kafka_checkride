@@ -39,7 +39,7 @@ Control Center should be available at http://localhost:9021/clusters
       --data-binary "@loan-approval/src/main/resources/connect/connector_external_scores.json" \
       http://localhost:8083/connectors
 
-After those steps you should see:
+6. After those steps you should see:
 ![My Image](loan-approval/src/main/resources/images/Connect.png)
 ----
 
