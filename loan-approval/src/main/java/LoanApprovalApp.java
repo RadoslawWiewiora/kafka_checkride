@@ -14,8 +14,8 @@ import pojo.avro.LoanDecision;
 import pojo.avro.LoanRequest;
 import pojo.avro.LoanRequestsWithCreditScore;
 
-import java.time.Duration;
 import java.util.Properties;
+import java.util.concurrent.CountDownLatch;
 
 public class LoanApprovalApp {
 
@@ -97,16 +97,20 @@ public class LoanApprovalApp {
 
         Properties properties = getConfig();
 
+        // Latch to block the main thread
+        final CountDownLatch latch = new CountDownLatch(1);
+
         // Create a streams application based on config & topology.
         try (KafkaStreams streams = new KafkaStreams(getTopology(properties), properties)) {
 
-            // Run the Streams application via `start()`
             streams.start();
+            latch.await();
 
-            // TODO How to run it locally for some period of time?
-            Thread.sleep(Duration.ofMinutes(10).toMillis());
+            Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+                streams.close();
+                latch.countDown();
+            }));
 
-            Runtime.getRuntime().addShutdownHook(new Thread(streams::close));
         } catch (InterruptedException e) {
             log.error(e.getMessage());
         }
