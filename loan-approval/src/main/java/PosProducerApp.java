@@ -14,6 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 import java.util.Random;
+import java.util.Scanner;
+
 
 public class PosProducerApp {
 
@@ -29,15 +31,19 @@ public class PosProducerApp {
 
         PosProducerApp app = new PosProducerApp();
         app.populateBfbClients();
+        Scanner scanner = new Scanner(System.in);
 
         while (produce) {
             app.sendLoanRequestForInternalClient();
             app.sendLoanRequestForExternalClient();
+            System.out.println("Produce more?");
+            scanner.nextLine();
         }
 
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             System.out.println("Shutting down producer...");
             produce = false;
+            scanner.close();
         }));
     }
 
