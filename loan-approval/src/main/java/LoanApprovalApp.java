@@ -1,10 +1,8 @@
 import io.confluent.kafka.streams.serdes.avro.SpecificAvroSerde;
-import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.Serde;
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.streams.StreamsBuilder;
-import org.apache.kafka.streams.StreamsConfig;
 import org.apache.kafka.streams.Topology;
 import org.apache.kafka.streams.kstream.*;
 import org.slf4j.Logger;
@@ -83,9 +81,6 @@ public class LoanApprovalApp {
 
         String propertiesFile = args[0];
         Properties properties = Utils.readProperties(propertiesFile);
-        properties.put(StreamsConfig.APPLICATION_ID_CONFIG, "loan-approval-1");
-        properties.put(StreamsConfig.CLIENT_ID_CONFIG, "loan-approval-client-1");
-        properties.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
 
         // Latch to block the main thread
         final CountDownLatch latch = new CountDownLatch(1);
