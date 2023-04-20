@@ -1,4 +1,3 @@
-import io.confluent.kafka.serializers.AbstractKafkaSchemaSerDeConfig;
 import io.confluent.kafka.streams.serdes.avro.SpecificAvroSerde;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.Serde;
@@ -20,19 +19,6 @@ import java.util.concurrent.CountDownLatch;
 public class LoanApprovalApp {
 
     private static final Logger log = LoggerFactory.getLogger(LoanApprovalApp.class.getSimpleName());
-
-    private static Properties getConfig() {
-
-        final Properties props = new Properties();
-
-        props.put(StreamsConfig.APPLICATION_ID_CONFIG, "loan-approval-1");
-        props.put(StreamsConfig.CLIENT_ID_CONFIG, "loan-approval-client-1");
-        props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, Constants.BOOTSTRAP_SERVERS_CONFIG);
-        props.put(AbstractKafkaSchemaSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG, Constants.SCHEMA_REGISTRY_URL_CONFIG);
-        props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
-
-        return props;
-    }
 
     public static Topology getTopology(Properties properties) {
 
@@ -95,7 +81,11 @@ public class LoanApprovalApp {
 
     public static void main(String[] args) {
 
-        Properties properties = getConfig();
+        String propertiesFile = args[0];
+        Properties properties = Utils.readProperties(propertiesFile);
+        properties.put(StreamsConfig.APPLICATION_ID_CONFIG, "loan-approval-1");
+        properties.put(StreamsConfig.CLIENT_ID_CONFIG, "loan-approval-client-1");
+        properties.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
 
         // Latch to block the main thread
         final CountDownLatch latch = new CountDownLatch(1);

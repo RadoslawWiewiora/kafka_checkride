@@ -1,4 +1,3 @@
-import io.confluent.kafka.serializers.AbstractKafkaSchemaSerDeConfig;
 import io.confluent.kafka.streams.serdes.avro.SpecificAvroSerde;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
@@ -18,8 +17,14 @@ public class PosConsumerApp {
 
     private static final Logger log = LoggerFactory.getLogger(PosConsumerApp.class.getSimpleName());
     private static boolean consume = true;
+    private static Properties properties;
 
     public static void main(String[] args) {
+
+        String propertiesFile = args[0];
+        properties = Utils.readProperties(propertiesFile);
+        properties.put(ConsumerConfig.GROUP_ID_CONFIG, "POS-Consumers");
+        properties.put(ConsumerConfig.CLIENT_ID_CONFIG, "POS-Consumer");
 
         PosConsumerApp app = new PosConsumerApp();
         app.readLoanDecisions();
@@ -31,8 +36,6 @@ public class PosConsumerApp {
     }
 
     public void readLoanDecisions() {
-
-        Properties properties = getConsumerConfig();
 
         final Serde<String> stringSerde = Serdes.String();
         final SpecificAvroSerde<LoanDecision> decisionSerde = Utils.getAvroSerde(properties);
@@ -64,16 +67,5 @@ public class PosConsumerApp {
         log.warn(decision.getApproved() ?
                 "DECISION: " + ANSI_GREEN + decision + ANSI_RESET :
                 "DECISION: " + ANSI_RED + decision + ANSI_RESET);
-    }
-
-    private Properties getConsumerConfig() {
-        final Properties props = new Properties();
-
-        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, Constants.BOOTSTRAP_SERVERS_CONFIG);
-        props.put(AbstractKafkaSchemaSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG, Constants.SCHEMA_REGISTRY_URL_CONFIG);
-        props.put(ConsumerConfig.GROUP_ID_CONFIG, "POS-Consumers");
-        props.put(ConsumerConfig.CLIENT_ID_CONFIG, "POS-Consumer");
-
-        return props;
     }
 }

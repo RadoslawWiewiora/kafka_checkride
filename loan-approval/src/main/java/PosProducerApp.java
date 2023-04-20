@@ -1,4 +1,3 @@
-import io.confluent.kafka.serializers.AbstractKafkaSchemaSerDeConfig;
 import io.confluent.kafka.serializers.KafkaAvroSerializer;
 import org.ajbrown.namemachine.Name;
 import org.ajbrown.namemachine.NameGenerator;
@@ -10,11 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pojo.avro.LoanRequest;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Properties;
-import java.util.Random;
-import java.util.Scanner;
+import java.util.*;
 
 
 public class PosProducerApp {
@@ -23,11 +18,18 @@ public class PosProducerApp {
 
     private static boolean produce = true;
 
+    private static Properties properties;
+
     private final Random randomNum = new Random();
 
     private List<ProducerRecord<String, LoanRequest>> bfbClients;
 
     public static void main(String[] args) {
+
+        String propertiesFile = args[0];
+        properties = Utils.readProperties(propertiesFile);
+        properties.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        properties.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, KafkaAvroSerializer.class);
 
         PosProducerApp app = new PosProducerApp();
         app.populateBfbClients();
@@ -49,7 +51,7 @@ public class PosProducerApp {
 
     public void sendLoanRequestForInternalClient() {
 
-        try (KafkaProducer<String, LoanRequest> producer = new KafkaProducer<>(getProducerConfig())) {
+        try (KafkaProducer<String, LoanRequest> producer = new KafkaProducer<>(properties)) {
             ProducerRecord<String, LoanRequest> internal = this.bfbClients.get(this.randomNum.nextInt(10));
             producer.send(internal);
             log.warn("REQUEST for: " + internal.value().getName() + " " + internal.value().getSurname());
@@ -58,7 +60,7 @@ public class PosProducerApp {
 
     public void sendLoanRequestForExternalClient() {
 
-        try (KafkaProducer<String, LoanRequest> producer = new KafkaProducer<>(getProducerConfig())) {
+        try (KafkaProducer<String, LoanRequest> producer = new KafkaProducer<>(properties)) {
             NameGenerator generator = new NameGenerator();
             Name name = generator.generateName();
             String key = String.valueOf(randomNum.nextInt());
@@ -93,16 +95,5 @@ public class PosProducerApp {
         this.bfbClients.add(generateRequest("Henry", "Smith", "8"));
         this.bfbClients.add(generateRequest("Emile", "Smith", "9"));
         this.bfbClients.add(generateRequest("Mike", "Johnson", "10"));
-    }
-
-    public static Properties getProducerConfig() {
-        final Properties props = new Properties();
-
-        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, Constants.BOOTSTRAP_SERVERS_CONFIG);
-        props.put(AbstractKafkaSchemaSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG, Constants.SCHEMA_REGISTRY_URL_CONFIG);
-        props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
-        props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, KafkaAvroSerializer.class);
-
-        return props;
     }
 }
