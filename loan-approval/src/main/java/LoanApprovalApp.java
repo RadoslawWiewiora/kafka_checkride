@@ -11,6 +11,7 @@ import pojo.avro.LoanDecision;
 import pojo.avro.LoanRequest;
 import pojo.avro.LoanRequestsWithCreditScore;
 
+import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.CountDownLatch;
 
@@ -35,7 +36,7 @@ public class LoanApprovalApp {
         // Source processor: get internal clients credit scores from Kafka topic
         KTable<String, credit_scores> internalClientsStream = builder.table(
                 Constants.INTERNAL_CREDIT_SCORES_TOPIC,
-                Consumed.with(stringSerde, clientSerde).withName("BFG_clients"));
+                Consumed.with(stringSerde, clientSerde).withName("BFG_data"));
 
         // Source processor: get internal clients credit scores from Kafka topic
         KStream<String, LoanRequestsWithCreditScore> externalCreditScores = builder.stream(
@@ -47,19 +48,22 @@ public class LoanApprovalApp {
         KStream<String, LoanRequestsWithCreditScore> joined = loanApplicationsStream.leftJoin(
                 internalClientsStream,
                 joiner,
-                Joined.with(stringSerde, requestSerde, clientSerde).withName("Enriched_with_BFB_data"));
+                Joined.with(stringSerde, requestSerde, clientSerde).withName("join_with_BFB_data"));
 
-        KStream<String, LoanRequestsWithCreditScore> withoutCreditScore = joined
-                .filter((k, v) -> v.getCreditScoreSource() == null, Named.as("Without_credit_score"));
-        KStream<String, LoanRequestsWithCreditScore> withInternalCreditScore = joined
-                .filter((k, v) -> v.getCreditScoreSource() != null, Named.as("BFB_credit_score"));
+        Map<String, KStream<String, LoanRequestsWithCreditScore>> branch = joined.split(Named.as("split_"))
+                .branch((k, v) -> v.getCreditScoreSource() == null,
+                        Branched.as("without_credit_score"))
+                .defaultBranch(Branched.as("BFB_credit_score"));
+
+        KStream<String, LoanRequestsWithCreditScore> withoutCreditScore = branch.get("split_without_credit_score");
+        KStream<String, LoanRequestsWithCreditScore> withBFBCreditScore = branch.get("split_BFB_credit_score");
 
         withoutCreditScore
                 .mapValues(CreditBureauMock::addCreditScore, Named.as("Add_credit_bureau_credit_score"))
                 .to(Constants.EXTERNAL_CREDIT_SCORES_TOPIC,
                     Produced.with(stringSerde, withScoreSerde).withName(Constants.EXTERNAL_CREDIT_SCORES_TOPIC));
 
-        KStream<String, LoanRequestsWithCreditScore> withCreditScore = withInternalCreditScore
+        KStream<String, LoanRequestsWithCreditScore> withCreditScore = withBFBCreditScore
                 .merge(externalCreditScores, Named.as("With_credit_score"));
 
         // Internal processor: make decision based on credit score

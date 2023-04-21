@@ -13,10 +13,10 @@ import org.apache.avro.message.SchemaStore;
 
 @org.apache.avro.specific.AvroGenerated
 public class credit_scores extends org.apache.avro.specific.SpecificRecordBase implements org.apache.avro.specific.SpecificRecord {
-  private static final long serialVersionUID = 7269728264876643287L;
+  private static final long serialVersionUID = 5685601431259579875L;
 
 
-  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"credit_scores\",\"fields\":[{\"name\":\"id\",\"type\":\"int\"},{\"name\":\"firstname\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"}},{\"name\":\"lastname\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"}},{\"name\":\"credit_score\",\"type\":\"int\"},{\"name\":\"timestamp\",\"type\":{\"type\":\"long\",\"connect.name\":\"org.apache.kafka.connect.data.Timestamp\",\"connect.version\":1,\"logicalType\":\"timestamp-millis\"}}],\"connect.name\":\"credit_scores\"}");
+  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"credit_scores\",\"fields\":[{\"name\":\"id\",\"type\":\"int\"},{\"name\":\"firstname\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"}},{\"name\":\"lastname\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"}},{\"name\":\"credit_score\",\"type\":\"int\"},{\"name\":\"social_secure_number\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"}},{\"name\":\"timestamp\",\"type\":{\"type\":\"long\",\"connect.name\":\"org.apache.kafka.connect.data.Timestamp\",\"connect.version\":1,\"logicalType\":\"timestamp-millis\"}}],\"connect.name\":\"credit_scores\"}");
   public static org.apache.avro.Schema getClassSchema() { return SCHEMA$; }
 
   private static final SpecificData MODEL$ = new SpecificData();
@@ -79,6 +79,7 @@ public class credit_scores extends org.apache.avro.specific.SpecificRecordBase i
   private java.lang.String firstname;
   private java.lang.String lastname;
   private int credit_score;
+  private java.lang.String social_secure_number;
   private java.time.Instant timestamp;
 
   /**
@@ -94,13 +95,15 @@ public class credit_scores extends org.apache.avro.specific.SpecificRecordBase i
    * @param firstname The new value for firstname
    * @param lastname The new value for lastname
    * @param credit_score The new value for credit_score
+   * @param social_secure_number The new value for social_secure_number
    * @param timestamp The new value for timestamp
    */
-  public credit_scores(java.lang.Integer id, java.lang.String firstname, java.lang.String lastname, java.lang.Integer credit_score, java.time.Instant timestamp) {
+  public credit_scores(java.lang.Integer id, java.lang.String firstname, java.lang.String lastname, java.lang.Integer credit_score, java.lang.String social_secure_number, java.time.Instant timestamp) {
     this.id = id;
     this.firstname = firstname;
     this.lastname = lastname;
     this.credit_score = credit_score;
+    this.social_secure_number = social_secure_number;
     this.timestamp = timestamp.truncatedTo(java.time.temporal.ChronoUnit.MILLIS);
   }
 
@@ -118,13 +121,15 @@ public class credit_scores extends org.apache.avro.specific.SpecificRecordBase i
     case 1: return firstname;
     case 2: return lastname;
     case 3: return credit_score;
-    case 4: return timestamp;
+    case 4: return social_secure_number;
+    case 5: return timestamp;
     default: throw new IndexOutOfBoundsException("Invalid index: " + field$);
     }
   }
 
   private static final org.apache.avro.Conversion<?>[] conversions =
       new org.apache.avro.Conversion<?>[] {
+      null,
       null,
       null,
       null,
@@ -147,7 +152,8 @@ public class credit_scores extends org.apache.avro.specific.SpecificRecordBase i
     case 1: firstname = value$ != null ? value$.toString() : null; break;
     case 2: lastname = value$ != null ? value$.toString() : null; break;
     case 3: credit_score = (java.lang.Integer)value$; break;
-    case 4: timestamp = (java.time.Instant)value$; break;
+    case 4: social_secure_number = value$ != null ? value$.toString() : null; break;
+    case 5: timestamp = (java.time.Instant)value$; break;
     default: throw new IndexOutOfBoundsException("Invalid index: " + field$);
     }
   }
@@ -221,6 +227,23 @@ public class credit_scores extends org.apache.avro.specific.SpecificRecordBase i
   }
 
   /**
+   * Gets the value of the 'social_secure_number' field.
+   * @return The value of the 'social_secure_number' field.
+   */
+  public java.lang.String getSocialSecureNumber() {
+    return social_secure_number;
+  }
+
+
+  /**
+   * Sets the value of the 'social_secure_number' field.
+   * @param value the value to set.
+   */
+  public void setSocialSecureNumber(java.lang.String value) {
+    this.social_secure_number = value;
+  }
+
+  /**
    * Gets the value of the 'timestamp' field.
    * @return The value of the 'timestamp' field.
    */
@@ -282,6 +305,7 @@ public class credit_scores extends org.apache.avro.specific.SpecificRecordBase i
     private java.lang.String firstname;
     private java.lang.String lastname;
     private int credit_score;
+    private java.lang.String social_secure_number;
     private java.time.Instant timestamp;
 
     /** Creates a new Builder */
@@ -311,9 +335,13 @@ public class credit_scores extends org.apache.avro.specific.SpecificRecordBase i
         this.credit_score = data().deepCopy(fields()[3].schema(), other.credit_score);
         fieldSetFlags()[3] = other.fieldSetFlags()[3];
       }
-      if (isValidValue(fields()[4], other.timestamp)) {
-        this.timestamp = data().deepCopy(fields()[4].schema(), other.timestamp);
+      if (isValidValue(fields()[4], other.social_secure_number)) {
+        this.social_secure_number = data().deepCopy(fields()[4].schema(), other.social_secure_number);
         fieldSetFlags()[4] = other.fieldSetFlags()[4];
+      }
+      if (isValidValue(fields()[5], other.timestamp)) {
+        this.timestamp = data().deepCopy(fields()[5].schema(), other.timestamp);
+        fieldSetFlags()[5] = other.fieldSetFlags()[5];
       }
     }
 
@@ -339,9 +367,13 @@ public class credit_scores extends org.apache.avro.specific.SpecificRecordBase i
         this.credit_score = data().deepCopy(fields()[3].schema(), other.credit_score);
         fieldSetFlags()[3] = true;
       }
-      if (isValidValue(fields()[4], other.timestamp)) {
-        this.timestamp = data().deepCopy(fields()[4].schema(), other.timestamp);
+      if (isValidValue(fields()[4], other.social_secure_number)) {
+        this.social_secure_number = data().deepCopy(fields()[4].schema(), other.social_secure_number);
         fieldSetFlags()[4] = true;
+      }
+      if (isValidValue(fields()[5], other.timestamp)) {
+        this.timestamp = data().deepCopy(fields()[5].schema(), other.timestamp);
+        fieldSetFlags()[5] = true;
       }
     }
 
@@ -504,6 +536,46 @@ public class credit_scores extends org.apache.avro.specific.SpecificRecordBase i
     }
 
     /**
+      * Gets the value of the 'social_secure_number' field.
+      * @return The value.
+      */
+    public java.lang.String getSocialSecureNumber() {
+      return social_secure_number;
+    }
+
+
+    /**
+      * Sets the value of the 'social_secure_number' field.
+      * @param value The value of 'social_secure_number'.
+      * @return This builder.
+      */
+    public credit_scores.Builder setSocialSecureNumber(java.lang.String value) {
+      validate(fields()[4], value);
+      this.social_secure_number = value;
+      fieldSetFlags()[4] = true;
+      return this;
+    }
+
+    /**
+      * Checks whether the 'social_secure_number' field has been set.
+      * @return True if the 'social_secure_number' field has been set, false otherwise.
+      */
+    public boolean hasSocialSecureNumber() {
+      return fieldSetFlags()[4];
+    }
+
+
+    /**
+      * Clears the value of the 'social_secure_number' field.
+      * @return This builder.
+      */
+    public credit_scores.Builder clearSocialSecureNumber() {
+      social_secure_number = null;
+      fieldSetFlags()[4] = false;
+      return this;
+    }
+
+    /**
       * Gets the value of the 'timestamp' field.
       * @return The value.
       */
@@ -518,9 +590,9 @@ public class credit_scores extends org.apache.avro.specific.SpecificRecordBase i
       * @return This builder.
       */
     public credit_scores.Builder setTimestamp(java.time.Instant value) {
-      validate(fields()[4], value);
+      validate(fields()[5], value);
       this.timestamp = value.truncatedTo(java.time.temporal.ChronoUnit.MILLIS);
-      fieldSetFlags()[4] = true;
+      fieldSetFlags()[5] = true;
       return this;
     }
 
@@ -529,7 +601,7 @@ public class credit_scores extends org.apache.avro.specific.SpecificRecordBase i
       * @return True if the 'timestamp' field has been set, false otherwise.
       */
     public boolean hasTimestamp() {
-      return fieldSetFlags()[4];
+      return fieldSetFlags()[5];
     }
 
 
@@ -538,7 +610,7 @@ public class credit_scores extends org.apache.avro.specific.SpecificRecordBase i
       * @return This builder.
       */
     public credit_scores.Builder clearTimestamp() {
-      fieldSetFlags()[4] = false;
+      fieldSetFlags()[5] = false;
       return this;
     }
 
@@ -551,7 +623,8 @@ public class credit_scores extends org.apache.avro.specific.SpecificRecordBase i
         record.firstname = fieldSetFlags()[1] ? this.firstname : (java.lang.String) defaultValue(fields()[1]);
         record.lastname = fieldSetFlags()[2] ? this.lastname : (java.lang.String) defaultValue(fields()[2]);
         record.credit_score = fieldSetFlags()[3] ? this.credit_score : (java.lang.Integer) defaultValue(fields()[3]);
-        record.timestamp = fieldSetFlags()[4] ? this.timestamp : (java.time.Instant) defaultValue(fields()[4]);
+        record.social_secure_number = fieldSetFlags()[4] ? this.social_secure_number : (java.lang.String) defaultValue(fields()[4]);
+        record.timestamp = fieldSetFlags()[5] ? this.timestamp : (java.time.Instant) defaultValue(fields()[5]);
         return record;
       } catch (org.apache.avro.AvroMissingFieldException e) {
         throw e;

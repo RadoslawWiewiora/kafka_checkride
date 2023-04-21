@@ -70,6 +70,20 @@ public class PosProducerApp {
         }
     }
 
+    public void bulkSendLoanRequestForExternalClient() {
+
+        try (KafkaProducer<String, LoanRequest> producer = new KafkaProducer<>(properties)) {
+            NameGenerator generator = new NameGenerator();
+            while (produce) {
+                Name name = generator.generateName();
+                String key = String.valueOf(randomNum.nextInt());
+                ProducerRecord<String, LoanRequest> external = generateRequest(name.getFirstName(), name.getLastName(), key);
+                producer.send(external);
+                log.warn("REQUEST for: " + external.value().getName() + " " + external.value().getSurname());
+            }
+        }
+    }
+
     private ProducerRecord<String, LoanRequest> generateRequest(String name, String surname, String key) {
 
         // Sample loan request

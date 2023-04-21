@@ -18,6 +18,10 @@
       "type": "int"
     },
     {
+      "name": "social_secure_number",
+      "type": "string"
+    },
+    {
       "name": "timestamp",
       "type": {
         "connect.name": "org.apache.kafka.connect.data.Timestamp",
