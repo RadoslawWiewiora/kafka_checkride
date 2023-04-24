@@ -1,7 +1,7 @@
 # kafka_checkride
 Check-ride project for Confluent bootcamp
 
-### Setup local environment
+## Setup local environment
 To run check-ride project locally you need to use Docker file (loan-approval/src/main/resources/docker-compose.yml)
 This files is taken from Confluent GitHub project (https://github.com/confluentinc/cp-all-in-one/blob/7.3.0-post/cp-all-in-one/docker-compose.yml) 
 and then modify (simplify without rest proxy and ksqldb).
@@ -16,7 +16,7 @@ Control Center should be available at http://localhost:9021/clusters
 
 ----
 
-#### Install connect JDBC plugin:
+### Install connect JDBC plugin:
 
 1. docker-compose exec -u root connect confluent-hub install confluentinc/kafka-connect-jdbc:10.0.0
 2. docker-compose restart connect
@@ -43,7 +43,7 @@ Control Center should be available at http://localhost:9021/clusters
 ![My Image](loan-approval/src/main/resources/images/Connect.png)
 ----
 
-#### Other useful commands
+### Other useful commands
 
 Reset consumer group offset (open docker broker terminal)
 
@@ -70,4 +70,23 @@ Open terminal and run LoanApprovalApp, then open in another terminal PosProducer
         ./kafka-avro-console-consumer --bootstrap-server localhost:9092 --topic loan_decisions
 
 
+## Setup cloud environment
+For Confluent Cloud you need account and database in some place like AWS cloud
 
+### Setup postgres DB in AWS
+Use this terraform script (loan-approval/src/main/resources/terraform/db_aws.tf)
+to add simple Postgres Database in AWS
+
+        terraform init
+        terraform plan
+        terraform apply
+
+Result should look like this:
+#### VPC
+![My Image](loan-approval/src/main/resources/images/VPC.png)
+
+#### DB
+![My Image](loan-approval/src/main/resources/images/DB.png)
+
+#### Connection to the Database:
+![My Image](loan-approval/src/main/resources/images/ConnectionToDb.png)
