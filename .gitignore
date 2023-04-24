@@ -26,3 +26,7 @@ hs_err_pid*
 /loan-approval/build/resources/main/
 /loan-approval/build/test-results/
 /loan-approval/build/reports/
+/loan-approval/src/main/resources/terraform/.terraform
+/loan-approval/src/main/resources/terraform/.terraform.lock.hcl
+/loan-approval/src/main/resources/terraform/terraform.tfstate
+/loan-approval/src/main/resources/terraform/terraform.tfstate.backup
