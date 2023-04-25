@@ -15,7 +15,7 @@ resource "aws_internet_gateway" "internet-gateway" {
   vpc_id = aws_vpc.vpc.id
 
   tags = {
-    Name = "rwiew_vpc IGW"
+    Name = "IGW"
   }
 }
 
@@ -23,7 +23,7 @@ resource "aws_route_table" "public_route_table" {
   vpc_id = aws_vpc.vpc.id
 
   tags = {
-    Name = "rwiew_vpc Public Route Table"
+    Name = "Public Route Table"
   }
 }
 
@@ -33,33 +33,27 @@ resource "aws_route" "public_internet_gateway" {
   gateway_id             = aws_internet_gateway.internet-gateway.id
 }
 
-resource "aws_route_table_association" "public_subnet_1_route_table_association" {
-  subnet_id = aws_subnet.public_subnet_1.id
-  route_table_id = aws_route_table.public_route_table.id
-}
-
-resource "aws_route_table_association" "public_subnet_2_route_table_association" {
-  subnet_id = aws_subnet.public_subnet_2.id
-  route_table_id = aws_route_table.public_route_table.id
-}
-
-resource "aws_subnet" "public_subnet_1" {
+resource "aws_subnet" "public_subnet" {
+  count = var.subnet_count
   vpc_id     = aws_vpc.vpc.id
-  availability_zone = "eu-west-1a"
-  cidr_block = "10.0.1.0/24"
+  availability_zone = var.availability_zones[count.index]
+  cidr_block = var.cidr_blocks[count.index]
   map_public_ip_on_launch = true
-}
 
-resource "aws_subnet" "public_subnet_2" {
-  vpc_id     = aws_vpc.vpc.id
-  availability_zone = "eu-west-1b"
-  cidr_block = "10.0.2.0/24"
-  map_public_ip_on_launch = true
+  tags = {
+    Name = "Public subnet ${count.index + 1}"
+  }
 }
 
 resource "aws_db_subnet_group" "postgres_subnet_group" {
   name       = "postgres-db-subnet-group"
-  subnet_ids = [aws_subnet.public_subnet_1.id, aws_subnet.public_subnet_2.id]
+  subnet_ids = aws_subnet.public_subnet.*.id
+}
+
+resource "aws_route_table_association" "public_subnet_route_table_association" {
+  count = var.subnet_count
+  subnet_id = aws_subnet.public_subnet[count.index].id
+  route_table_id = aws_route_table.public_route_table.id
 }
 
 resource "aws_security_group" "rds_sg" {
