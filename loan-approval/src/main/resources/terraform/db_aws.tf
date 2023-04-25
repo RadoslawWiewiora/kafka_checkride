@@ -1,18 +1,18 @@
 provider "aws" {
-  region = "eu-west-1"
+  region = var.region
 }
 
-resource "aws_vpc" "rwiew_vpc" {
+resource "aws_vpc" "vpc" {
   cidr_block = "10.0.0.0/16"
   enable_dns_hostnames = true
 
   tags = {
-    Name = "rwiew_vpc"
+    Name = var.vpc
   }
 }
 
 resource "aws_internet_gateway" "internet-gateway" {
-  vpc_id = aws_vpc.rwiew_vpc.id
+  vpc_id = aws_vpc.vpc.id
 
   tags = {
     Name = "rwiew_vpc IGW"
@@ -20,7 +20,7 @@ resource "aws_internet_gateway" "internet-gateway" {
 }
 
 resource "aws_route_table" "public_route_table" {
-  vpc_id = aws_vpc.rwiew_vpc.id
+  vpc_id = aws_vpc.vpc.id
 
   tags = {
     Name = "rwiew_vpc Public Route Table"
@@ -44,14 +44,14 @@ resource "aws_route_table_association" "public_subnet_2_route_table_association"
 }
 
 resource "aws_subnet" "public_subnet_1" {
-  vpc_id     = aws_vpc.rwiew_vpc.id
+  vpc_id     = aws_vpc.vpc.id
   availability_zone = "eu-west-1a"
   cidr_block = "10.0.1.0/24"
   map_public_ip_on_launch = true
 }
 
 resource "aws_subnet" "public_subnet_2" {
-  vpc_id     = aws_vpc.rwiew_vpc.id
+  vpc_id     = aws_vpc.vpc.id
   availability_zone = "eu-west-1b"
   cidr_block = "10.0.2.0/24"
   map_public_ip_on_launch = true
@@ -65,12 +65,12 @@ resource "aws_db_subnet_group" "postgres_subnet_group" {
 resource "aws_security_group" "rds_sg" {
   name        = "example_rds_sg"
   description = "RDS security group"
-  vpc_id      = aws_vpc.rwiew_vpc.id
+  vpc_id      = aws_vpc.vpc.id
 
   ingress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
+    from_port   = 5432
+    to_port     = 5432
+    protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
 
